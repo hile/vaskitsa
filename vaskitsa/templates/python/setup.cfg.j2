@@ -1,0 +1,30 @@
+[metadata]
+description-file = README.md
+
+[tox]
+envlist = py36
+
+[testenv]
+deps =
+    -r requirements/test.txt
+commands =
+    unittest: coverage run --source {{ module }} --module py.test
+    unittest: coverage html
+    unittest: coverage report
+
+    lint: pylint setup.py  {{ test_module }} {{ module }}
+    lint: flake8 | sort
+
+[tool:pytest]
+addopts = --verbose
+
+[flake8]
+max-line-length = 120
+exclude =
+    .git,
+    .eggs,
+    .tox,
+    __pycache__,
+    docs/conf.py,
+    build,
+    dist

@@ -1,0 +1,35 @@
+"""
+Django settings for {{ project_name }}
+"""
+
+from .apps import detect_apps
+from .database import configure_database
+from .environment import initialize_environment
+
+from .authentication import *
+from .locale import *
+from .middleware import *
+from .static import *
+from .templates import *
+
+env = initialize_environment()
+
+DEBUG = env.bool('DJANGO_DEBUG', False)
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='{{ secret_key}}')
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
+ROOT_URLCONF = '{{ project_name }}.urls'
+WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
+
+DATABASES = configure_database(env)
+
+DJANGO_CORE_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+THIRDPARTY_APPS = []
+
+INSTALLED_APPS = DJANGO_CORE_APPS + THIRDPARTY_APPS + detect_apps()

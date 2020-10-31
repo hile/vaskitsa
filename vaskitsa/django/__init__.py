@@ -1,0 +1,3 @@
+"""
+Django utilities for vaskitsa
+"""

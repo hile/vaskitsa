@@ -1,0 +1,27 @@
+"""
+Load .env files for project {{ project_name }}
+"""
+
+from pathlib import Path
+
+import os
+import environ
+
+
+def initialize_environment():
+    """
+    Initialize environment
+    """
+    base_dir = Path(__file__).resolve().parent.parent
+    env = environ.Env()
+    django_env = os.environ.get('DJANGO_ENV', None)
+    if django_env:
+        env_file = base_dir.joinpath(f'.env.{django_env}')
+        if not env_file.is_file():
+            raise ValueError(f'Missing environment file: {env_file}')
+        env.read_env(env_file)
+    else:
+        env_file = base_dir.joinpath('env')
+        if env_file.is_file():
+            env.read_env(env_file)
+    return env

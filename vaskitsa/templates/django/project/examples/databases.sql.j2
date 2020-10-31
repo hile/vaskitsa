@@ -1,0 +1,13 @@
+
+DROP DATABASE IF EXISTS {{ database_name }};
+DROP DATABASE IF EXISTS test_{{ database_name }};
+DROP ROLE {{ database_user }};
+
+CREATE USER {{ database_user }} WITH PASSWORD '{{ database_password }}';
+ALTER ROLE {{ database_user }} SET client_encoding TO 'utf8';
+ALTER ROLE {{ database_user }} SET default_transaction_isolation TO 'read committed';
+ALTER ROLE {{ database_user }} SET timezone TO 'UTC';
+ALTER ROLE {{ database_user }} CREATEDB;
+
+CREATE DATABASE {{ database_name }};
+GRANT ALL PRIVILEGES ON DATABASE {{ database_name }} TO {{ database_user }};

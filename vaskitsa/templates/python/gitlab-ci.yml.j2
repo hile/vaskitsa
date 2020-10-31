@@ -1,0 +1,26 @@
+---
+#
+# Gitlab CI pipeline for {{ repository }}
+#
+
+image:
+  name: {{ gitlab_image }}
+
+stages:
+  - ci-tests
+
+lint:
+  stage: ci-tests
+  script:
+    - make lint
+
+unittest:
+  stage: ci-tests
+  script:
+    - make test
+
+  artifacts:
+    paths:
+      - coverage.xml
+    reports:
+      junit: coverage.xml

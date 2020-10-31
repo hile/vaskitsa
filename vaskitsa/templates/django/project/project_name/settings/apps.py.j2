@@ -1,0 +1,20 @@
+"""
+Detect local django installed apps for {{ project_name }}
+"""
+
+import inflection
+from pathlib import Path
+
+
+def detect_apps():
+    """
+    Detect installed apps automatically
+    """
+    apps_dir = Path(__file__).resolve().parent.parent.parent.joinpath('apps')
+    apps = []
+    for item in apps_dir.iterdir():
+        app_file = item.joinpath('apps.py')
+        if app_file.is_file():
+            app = f'apps.{item.name}.apps.{inflection.camelize(item.name)}Config'
+            apps.append(app)
+    return apps

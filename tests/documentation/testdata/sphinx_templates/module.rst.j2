@@ -1,0 +1,9 @@
+Module {{ item.relative_directory }}
+{{ '#' * (item.relative_directory | string | length + 7) }}
+
+.. toctree::
+    :maxdepth: {{ item.index_max_depth }}
+    :caption: {{ item.title }}
+{% for toc_item in item.file_import_paths %}
+    {{ toc_item }}
+{%- endfor %}

@@ -1,0 +1,30 @@
+
+from setuptools import setup, find_packages
+from {{ repository.module_name }}.version import __version__
+
+setup(
+    name='{{ repository.module_name }}',
+    keywords='system management shell command utility cli',
+    description='Classes to implement CLI commands in python',
+    author='Ilkka Tuohela',
+    author_email='hile@iki.fi',
+    url='https://git.tuohela.net/systematic-components/systematic-cli',
+    version=__version__,
+    license='PSF',
+    python_requires='>3.6.0',
+    packages=find_packages(),
+    install_requires=(
+        'setproctitle',
+    ),
+    classifiers=[
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: Python Software Foundation License',
+        'Operating System :: POSIX',
+        'Operating System :: MacOS :: MacOS X',
+        'Programming Language :: Python :: 3',
+        'Topic :: System',
+        'Topic :: System :: Systems Administration',
+    ],
+)

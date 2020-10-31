@@ -1,0 +1,21 @@
+"""
+Django application config for {{ app_name }}
+"""
+
+from pathlib import Path
+
+from django.apps import AppConfig
+
+
+class {{ camel_case_app_name }}Config(AppConfig):
+    """
+    Django app {{ camel_case_app_name }}
+    """
+    path = Path(__file__).parent
+    name = 'apps.{{ app_name }}'
+    verbose_name = '{{ camel_case_app_name }}'
+
+    def ready(self):
+        """
+        App ready for use callback
+        """

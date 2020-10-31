@@ -1,0 +1,6 @@
+"""
+Models for {{ app_name }}
+"""
+{% for model in models %}
+from .{{ model.model_name }} import {{ model.model }}
+{%- endfor %}

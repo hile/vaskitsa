@@ -1,0 +1,16 @@
+{{ item.import_path }}
+{{ '#' * item.import_path | length }}
+
+.. automodule:: {{ item.import_path }}
+{%- for line in item.automodule_flags %}
+    {{ line }}
+{%- endfor %}
+
+{% if item.is_index -%}
+.. toctree::
+    :maxdepth: {{ item.module.index_max_depth }}
+    :caption: Modules {{ item.module.title }}
+{% for toc_item in item.file_import_paths %}
+    {{ toc_item }}
+{%- endfor %}
+{%- endif %}

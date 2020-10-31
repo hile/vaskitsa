@@ -1,0 +1,26 @@
+
+from django.db import models
+
+
+class {{ camel_case_model_name }}QuerySet(models.QuerySet):
+    """
+    Query set for {{ camel_case_model_name }} objects
+    """
+
+class {{ camel_case_model_name }}Manager(models.Manager):
+    """
+    Manager for {{ camel_case_model_name }} objects
+    """
+    def get_queryset(self):
+        """
+        Return custom query set for objects
+        """
+        return {{ camel_case_model_name }}QuerySet(self.model, using=self._db)
+
+
+class {{ camel_case_model_name }}(models.Model):
+    """
+    Model {{ camel_case_model_name }}
+    """
+
+    objects = {{ camel_case_model_name }}Manager()

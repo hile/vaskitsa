@@ -1,0 +1,14 @@
+
+from django_filters import rest_framework as drf_filters
+
+from ..models import {{ camel_case_model_name }}
+
+
+class {{ camel_case_model_name }}FilterSet(drf_filters.FilterSet):
+    """
+    Filter set for {{ camel_case_model_name }}
+    """
+
+    class Meta:
+        model = {{ camel_case_model_name }}
+        fields = ()

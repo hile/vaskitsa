@@ -1,0 +1,2 @@
+recursive-include vaskitsa/templates/django *
+recursive-include vaskitsa/templates/sphinx *

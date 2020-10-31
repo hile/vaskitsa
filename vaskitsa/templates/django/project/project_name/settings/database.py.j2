@@ -1,0 +1,20 @@
+"""
+Database configuration for {{ project_name }}
+"""
+
+
+def configure_database(env):
+    """
+    Configure database from environment variables
+    """
+    return {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('DATABASE_NAME', default='{{ database_name }}'),
+            'USER': env('DATABASE_USER', default='{{ database_user }}'),
+            'PASSWORD': env('DATABASE_PASSWORD', default='{{ database_password }}'),
+            'HOST': env('DATABASE_HOST', default='{{ database_host }}'),
+            'PORT': env('DATABASE_PORT', default='{{ database_port }}'),
+            'CONN_MAX_AGE': 30
+        }
+    }
