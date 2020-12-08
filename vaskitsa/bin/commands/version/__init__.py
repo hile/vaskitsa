@@ -2,7 +2,7 @@
 CLI command 'vaskitsa version'
 """
 
-from systematic_cli.command import Command
+from cli_toolkit.command import Command
 
 from .show import Show
 from .update import Update

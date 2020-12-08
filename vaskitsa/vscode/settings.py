@@ -2,7 +2,7 @@
 Visual Studio Code settings configuration section parser
 """
 
-from systematic_cli.configuration import JsonConfiguration
+from cli_toolkit.configuration import JsonConfiguration
 
 from .base import FilePatternList, VSCodeConfigurationSection
 

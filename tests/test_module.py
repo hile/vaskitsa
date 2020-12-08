@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from systematic_files.tree import FilesystemError
+from pathlib_tree.tree import FilesystemError
 
 from vaskitsa.python.module import PythonModule
 

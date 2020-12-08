@@ -4,7 +4,7 @@ Unit test cases for loading File objects
 
 import pytest
 
-from systematic_files.tree import FilesystemError
+from pathlib_tree.tree import FilesystemError
 
 from vaskitsa.python.file import PythonFile
 

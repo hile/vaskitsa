@@ -4,18 +4,16 @@ from {{ repository.module_name }}.version import __version__
 
 setup(
     name='{{ repository.module_name }}',
-    keywords='system management shell command utility cli',
-    description='Classes to implement CLI commands in python',
+    keywords='{{ repository.keywords }},
+    description='{{ repository.description }}',
     author='Ilkka Tuohela',
     author_email='hile@iki.fi',
-    url='https://git.tuohela.net/systematic-components/systematic-cli',
+    url='{{ repository.url }}',
     version=__version__,
     license='PSF',
     python_requires='>3.6.0',
     packages=find_packages(),
-    install_requires=(
-        'setproctitle',
-    ),
+    install_requires=(),
     classifiers=[
         'Environment :: Console',
         'Intended Audience :: Developers',

@@ -20,11 +20,12 @@ setup(
     },
     include_package_data=True,
     install_requires=(
+        'cli-toolkit>=1.0.0',
         'inflection==0.4.0',
         'jinja2>=2.11.2',
         'packaging>=20.3',
         'requests>=2.24.0',
-        'systematic-files>=1.3.0',
+        'pathlib-tree>=1.0.0',
     ),
     classifiers=[
         'Environment :: Console',

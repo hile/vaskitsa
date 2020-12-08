@@ -1,7 +1,7 @@
 
 from packaging.version import Version, InvalidVersion
 
-from systematic_files.tree import FilesystemError
+from pathlib_tree.tree import FilesystemError
 
 from .constants import DUMMY_VERSION, RE_VERSION_LINE
 from .utils import validate_module_name

@@ -5,7 +5,7 @@ Base class for python file
 from pathlib import Path
 import os
 
-from systematic_files.exceptions import FilesystemError
+from pathlib_tree.exceptions import FilesystemError
 
 EMPTY_FILE = '''"""
 Automatically generated file

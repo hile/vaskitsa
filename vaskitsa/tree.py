@@ -1,10 +1,10 @@
 """
-Extend systematic_files.tree.Tree for vaskitsa
+Extend Tree objects for vaskitsa code repositories
 """
 
 from pathlib import Path
-from systematic_cli.base import Meta
-from systematic_files.tree import Tree
+from cli_toolkit.base import Meta
+from pathlib_tree.tree import Tree
 
 from .configuration import Configuration
 

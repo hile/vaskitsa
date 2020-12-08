@@ -6,8 +6,8 @@ import os
 
 from pathlib import Path
 
-from systematic_cli.base import ScriptError
-from systematic_cli.process import run_command_lineoutput
+from cli_toolkit.base import ScriptError
+from cli_toolkit.process import run_command_lineoutput
 
 from ..exceptions import GitError
 

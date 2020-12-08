@@ -1,5 +1,5 @@
 
-from systematic_cli.base import NestedCliCommand
+from cli_toolkit.base import NestedCliCommand
 
 
 class Runner(NestedCliCommand):

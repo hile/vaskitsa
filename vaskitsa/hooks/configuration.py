@@ -1,5 +1,5 @@
 
-from systematic_cli.configuration import ConfigurationSection
+from cli_toolkit.configuration import ConfigurationSection
 
 
 class HooksConfiguration(ConfigurationSection):

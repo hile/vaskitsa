@@ -1,5 +1,5 @@
 #
-# Developer requirements for systematic-cli
+# Developer requirements for vaskitsa
 #
 -r test.txt
 ipython==7.13.0

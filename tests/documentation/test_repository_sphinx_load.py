@@ -46,7 +46,7 @@ def validate_renderer(renderer):
 
 def test_repository_load_sphinx_self():
     """
-    Load systematic-doc-generator source code as sphinx generator
+    Test loading repository source code as sphinx generator
     """
     output_prefix = Path('/tmp/doctest')
 

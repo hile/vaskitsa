@@ -1,5 +1,5 @@
 
-from systematic_cli.script import Script
+from cli_toolkit.script import Script
 
 from .commands.documentation import Documentation
 from .commands.python import Python

@@ -2,7 +2,7 @@
 CLI command 'vaskitsa python'
 """
 
-from systematic_cli.command import Command
+from cli_toolkit.command import Command
 
 
 class Python(Command):

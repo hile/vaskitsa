@@ -7,7 +7,7 @@ from datetime import datetime
 
 import pytz
 
-from systematic_cli.encoders import DateTimeEncoder
+from cli_toolkit.encoders import DateTimeEncoder
 
 
 class GitCommit:

@@ -1,5 +1,5 @@
 
-from systematic_cli.command import Command
+from cli_toolkit.command import Command
 
 
 class AutodocGeneratorCommand(Command):

@@ -8,8 +8,8 @@ import os
 
 from pathlib import Path
 
-from systematic_files.exceptions import FilesystemError
-from systematic_files.tree import Tree
+from pathlib_tree.exceptions import FilesystemError
+from pathlib_tree.tree import Tree
 
 from .constants import MODULE_DEFAULT_GROUP
 from .file import PythonFile

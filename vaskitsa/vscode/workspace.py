@@ -5,7 +5,7 @@ Visual Studio Code workspaces configuration files
 from pathlib import Path
 
 
-from systematic_cli.configuration import JsonConfiguration
+from cli_toolkit.configuration import JsonConfiguration
 from .settings import Settings
 
 

@@ -2,7 +2,7 @@
 Base class for subcommands of CLI command 'vaskitsa version'
 """
 
-from systematic_cli.command import Command
+from cli_toolkit.command import Command
 
 
 class VersionSubCommand(Command):

@@ -1,5 +1,6 @@
 
-from systematic_cli.tests import validate_version_string
+from cli_toolkit.tests.packaging import validate_version_string
+
 from vaskitsa import __version__
 
 

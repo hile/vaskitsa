@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-from systematic_files.tree import Tree
+from pathlib_tree.tree import Tree
 
 from vaskitsa.documentation.base import DocumentGeneratorError
 from vaskitsa.documentation.repository import RepositoryDocumentGenerator

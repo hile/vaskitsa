@@ -2,7 +2,7 @@
 Test generating sphinx documentation for test data
 """
 
-from systematic_files.tree import Tree
+from pathlib_tree.tree import Tree
 from vaskitsa.documentation.loader import get_processor
 
 from .constants import NO_INIT_PATH
