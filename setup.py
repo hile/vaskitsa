@@ -25,7 +25,7 @@ setup(
         'jinja2>=2.11.2',
         'packaging>=20.3',
         'requests>=2.24.0',
-        'pathlib-tree>=1.0.0',
+        'pathlib-tree>=1.0.1',
     ),
     classifiers=[
         'Environment :: Console',
