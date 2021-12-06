@@ -1,5 +1,5 @@
 #
-# Developer requirements for vaskitsa
+# Developer requirements for cli-toolkit
 #
 -r test.txt
 ipython==7.13.0

@@ -18,15 +18,16 @@ EXPECTED_MODULES = (
     'vaskitsa/bin/commands/documentation',
     'vaskitsa/bin/commands/python',
     'vaskitsa/bin/commands/version',
+    'vaskitsa/django',
     'vaskitsa/documentation',
     'vaskitsa/documentation/renderers',
     'vaskitsa/documentation/sphinx',
-    'vaskitsa/django',
     'vaskitsa/git',
     'vaskitsa/hooks',
     'vaskitsa/hooks/python',
-    'vaskitsa/classifiers',
     'vaskitsa/python',
+    'vaskitsa/python/classifiers',
+    'vaskitsa/python/requirements',
     'vaskitsa/templates',
     'vaskitsa/templates/django',
     'vaskitsa/vscode',
@@ -35,6 +36,9 @@ EXPECTED_TEST_MODULES = (
     'tests',
     'tests/cli',
     'tests/git',
+    'tests/documentation/testdata/test-module-no-indexes/a',
+    'tests/documentation/testdata/test-module-no-indexes/b',
+    'tests/documentation/testdata/test-module-no-indexes/c',
     'tests/documentation'
 )
 

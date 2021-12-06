@@ -18,7 +18,6 @@ def detect_repository_module_name(repository):
     module_name = inflection.underscore(repository.name)
     if '-' in module_name:
         module_name = module_name.replace('-', '_')
-    print('detect repository module name', repository, module_name)
     return module_name
 
 

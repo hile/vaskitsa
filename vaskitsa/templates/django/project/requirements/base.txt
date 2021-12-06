@@ -4,7 +4,7 @@ chardet==3.0.4
 configobj==5.0.6
 coreapi==2.3.3
 coreschema==0.0.4
-Django==3.1.1
+Django==3.2.0
 django-appconf==1.0.4
 django-compressor==2.4
 django-cors-headers==3.5.0

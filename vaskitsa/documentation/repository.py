@@ -4,10 +4,8 @@ Python code repository documentation with modules
 
 from pathlib import Path
 
-from ..exceptions import DocumentGeneratorError
 from ..templates.template import TemplateRenderer
 from ..python.repository import Repository
-from ..python.utils import is_python_module_directory
 
 from .base import TemplateGenerator
 from .configuration import DEFAULT_DOCUMENTS_PATH
@@ -23,14 +21,6 @@ class RepositoryDocumentGenerator(Repository, TemplateGenerator):
 
     template_loader = TemplateRenderer
     """Class for jinja2 template rendering"""
-
-    # pylint: disable=redefined-builtin
-    def __init__(self, path, name=None, create_missing=False, sorted=True, mode=None,
-                 excluded=list, configuration=None):
-
-        super().__init__(path, name, create_missing, sorted, mode, excluded, configuration)
-        if is_python_module_directory(self):
-            raise DocumentGeneratorError(f'Repository is python module: {self}')
 
     @property
     def template_configuration(self):
@@ -68,7 +58,8 @@ class RepositoryDocumentGenerator(Repository, TemplateGenerator):
             self.debug('set output directory to', self.default_output_directory)
             directory = self.default_output_directory
 
-        self.message('generate code documentation', directory)
+        print(f'generate repository documentation {self} {type(self)}')
         for module in self.python_modules:
+            print(f'generate python module docs for {module} to {directory}')
             module.generate_module_docs(directory)
         super().generate(directory)

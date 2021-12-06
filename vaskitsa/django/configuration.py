@@ -24,12 +24,12 @@ class ProjectConfiguration:
         Load project configuration
         """
         self.project = None
-        with self.path.open('r') as filedescriptor:
+        with self.path.open('r', encoding='utf-8') as filedescriptor:
             config = yaml.safe_load(filedescriptor.read())
 
         self.project = Project(
-             self.directory.joinpath(config['name']),
-             config.get('version', None)
+            self.directory.joinpath(config['name']),
+            config.get('version', None)
         )
         for item in config.get('apps', []):
             app = self.project.add_app(item['name'])

@@ -17,14 +17,13 @@ class FileTemplate(TemplateRenderer):
     def __repr__(self):
         return str(self.path)
 
-    # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ,arguments-renamed
     def render(self, target_path):
         """
         Render template to target path
         """
         kwargs = self.component.get_template_vars()
         print(f'render {target_path}',)
-        with open(target_path, 'w') as filedescriptor:
-            filedescriptor.write(
-                '{}\n'.format(self.template.render(**kwargs))
-            )
+        with open(target_path, 'w', encoding='utf-8') as filedescriptor:
+            # pylint: disable=consider-using-f-string
+            filedescriptor.write('{}\n'.format(self.template.render(**kwargs)))

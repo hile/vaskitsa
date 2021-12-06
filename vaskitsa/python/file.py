@@ -22,7 +22,7 @@ class PythonFile:
         self.module = module
         self.path = Path(path)
         if not self.path.is_file() and create_missing:
-            with open(self.path, 'w') as filedescriptor:
+            with open(self.path, 'w', encoding='utf-8') as filedescriptor:
                 filedescriptor.write(EMPTY_FILE)
         self.module_root = self.path.name == '__init__.py'
 

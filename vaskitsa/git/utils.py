@@ -6,8 +6,8 @@ import os
 
 from pathlib import Path
 
-from cli_toolkit.base import ScriptError
-from cli_toolkit.process import run_command_lineoutput
+from sys_toolkit.exceptions import CommandError
+from sys_toolkit.subprocess import run_command_lineoutput
 
 from ..exceptions import GitError
 
@@ -45,7 +45,7 @@ def run_git_command(*args, **kwargs):
     cmd = ['git'] + list(args)
     try:
         stdout, stderr = run_command_lineoutput(*cmd, cwd=cwd)
-    except ScriptError as error:
+    except CommandError as error:
         raise GitError(error) from error
     if stderr:
         print(stderr)

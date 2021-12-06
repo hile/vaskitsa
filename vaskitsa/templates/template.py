@@ -52,7 +52,7 @@ class TemplateRenderer:
         """
         if self.template_directory is not None:
             return FileSystemLoader(self.template_directory)
-        return PackageLoader(self.__module__.split('.')[0], str(self.template_path))
+        return PackageLoader(self.__module__.split('.', maxsplit=1)[0], str(self.template_path))
 
     @property
     def environment(self):

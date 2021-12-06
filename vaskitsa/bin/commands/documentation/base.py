@@ -18,7 +18,7 @@ class AutodocGeneratorCommand(Command):
         )
         return parser
 
-    def parse_args(self, args):
+    def parse_args(self, args=None, namespace=None):
         """
         Parse arguments for autodoc generators
         """

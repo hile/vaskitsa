@@ -25,9 +25,9 @@ class PythonModule(Tree):
         return str(self.relative_directory)
 
     # pylint: disable=redefined-builtin
-    def __init__(self, path, repository=None, group=None,
-                 create_missing=False, sorted=True, mode=None):
-        super().__init__(path, create_missing=False, sorted=sorted, mode=mode)
+    def __init__(self, path, repository=None, group=None, create_missing=False,
+                 sorted=True, mode=None, excluded=None):
+        super().__init__(path, create_missing=False, sorted=sorted, mode=mode, excluded=excluded)
         self.repository = repository
         self.group = group
         if not self.is_dir() and create_missing:

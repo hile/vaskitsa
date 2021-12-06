@@ -78,6 +78,6 @@ class TemplateGenerator:
             self.debug('create directory', path.parent)
             path.parent.mkdir(parents=True)
 
-        with open(path, 'w') as filedescriptor:
+        with open(path, 'w', encoding='utf-8') as filedescriptor:
             filedescriptor.write(f'{self.render_template()}\n')
         return path

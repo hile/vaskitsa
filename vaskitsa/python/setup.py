@@ -83,4 +83,5 @@ class SetupConfig(ConfigParser):
         """
         if section:
             return self[section].items()
+        # pylint: disable=consider-using-dict-items
         return ItemsView(dict((key, self[key]) for key in self.keys()))

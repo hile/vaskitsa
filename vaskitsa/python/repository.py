@@ -24,12 +24,10 @@ class Repository(RepositoryTree):
     """
     python_module_class = PythonModule
 
-    # pylint: disable=attribute-defined-outside-init
-    def initialize(self, *args, **kwargs):
-        """
-        Initialize python tree
-        """
-        super().initialize(*args, **kwargs)
+    # pylint: disable=redefined-builtin
+    def __init__(self, path, name=None, create_missing=False, sorted=True, mode=None,
+                 excluded=list, configuration=None):
+        super().__init__(path, create_missing, sorted, mode, excluded)
         self.__module_index__ = {}
         self.__python_modules__ = None
         self.__python_test_modules__ = None

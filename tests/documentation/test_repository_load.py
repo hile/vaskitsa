@@ -9,14 +9,12 @@ import pytest
 
 from pathlib_tree.tree import Tree
 
-from vaskitsa.documentation.base import DocumentGeneratorError
 from vaskitsa.documentation.repository import RepositoryDocumentGenerator
 from vaskitsa.templates.template import TemplateRenderer
 
 from .constants import (
     EXCLUDED,
     NO_INIT_PATH,
-    REPO_PACKAGE_PATH,
     REPO_ROOT_PATH,
     EXPECTED_MODULES,
     EXPECTED_TEST_MODULES,
@@ -87,14 +85,6 @@ def test_repository_load_no_init():
 
     for module in repository.python_modules:
         validate_module(module, renderer=TemplateRenderer)
-
-
-def test_repository_load_package_directory():
-    """
-    Test loading package directory as repository
-    """
-    with pytest.raises(DocumentGeneratorError):
-        RepositoryDocumentGenerator(REPO_PACKAGE_PATH)
 
 
 def test_repository_generate_exception():

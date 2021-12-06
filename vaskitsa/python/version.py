@@ -52,7 +52,7 @@ class PythonRepositoryVersion(Version):
 
         lines = []
         version_line = f"""__version__ = '{version}'\n"""
-        with open(module.index.path, 'r') as filedescriptor:
+        with open(module.index.path, 'r', encoding='utf-8') as filedescriptor:
             for line in filedescriptor.readlines():
                 match = RE_VERSION_LINE.match(line)
                 if match:
@@ -60,6 +60,6 @@ class PythonRepositoryVersion(Version):
                 else:
                     lines.append(line)
         lines = [line.rstrip() for line in lines]
-        with open(module.index.path, 'w') as filedescriptor:
+        with open(module.index.path, 'w', encoding='utf-8') as filedescriptor:
             data = '\n'.join(lines)
             filedescriptor.write(f'{data}\n')

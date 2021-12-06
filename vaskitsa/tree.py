@@ -3,13 +3,12 @@ Extend Tree objects for vaskitsa code repositories
 """
 
 from pathlib import Path
-from cli_toolkit.base import Meta
 from pathlib_tree.tree import Tree
 
 from .configuration import Configuration
 
 
-class RepositoryTree(Tree, metaclass=Meta):
+class RepositoryTree(Tree):
     """
     Abstraction for source code repository trees
     """
@@ -38,12 +37,6 @@ class RepositoryTree(Tree, metaclass=Meta):
         super().__init__(path, create_missing, sorted, mode, self.excluded)
 
         self.repository_name = name if name is not None else self.name
-
-    def initialize(self, *args, **kwargs):
-        """
-        Meta init method for trees. Executed after object is initialized
-        """
-        self.debug('initialize repository tree', args, kwargs)
 
     def debug(self, *args):
         """

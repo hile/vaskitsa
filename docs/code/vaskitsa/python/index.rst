@@ -14,7 +14,6 @@ vaskitsa.python
     file
     module
     repository
-    requirements
     setup
     utils
     version

@@ -87,7 +87,7 @@ class DjangoPackageRenderer(Tree):
         template_vars.update(**kwargs)
         return template_vars
 
-    # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ,arguments-renamed
     def create(self, overwrite=False):
         """
         Create app directory structure from filenames in template
