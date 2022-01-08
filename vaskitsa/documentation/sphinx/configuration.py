@@ -1,5 +1,5 @@
 
-from cli_toolkit.configuration import ConfigurationSection
+from sys_toolkit.configuration.base import ConfigurationSection
 
 DEFAULT_SPHINX_AUTODOC_PATH = 'docs/code'
 DEFAULT_SPHINX_TOCTREE_DEPTH = 2

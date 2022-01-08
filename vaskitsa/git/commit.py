@@ -4,10 +4,11 @@ Git commit in a repository
 
 import json
 from datetime import datetime
-
-import pytz
+from zoneinfo import ZoneInfo
 
 from sys_toolkit.encoders import DateTimeEncoder
+
+UTC_TIMEZONE = ZoneInfo('UTC')
 
 
 class GitCommit:
@@ -89,7 +90,7 @@ class GitCommit:
         """
         Return git commit author timestamp as datetime in UTC
         """
-        return datetime.fromtimestamp(self.author_timestamp).astimezone(pytz.UTC)
+        return datetime.fromtimestamp(self.author_timestamp).astimezone(UTC_TIMEZONE)
 
     @property
     def commit_message(self):
@@ -110,7 +111,7 @@ class GitCommit:
         """
         Return commit timestamp as datetime in UTC
         """
-        return datetime.fromtimestamp(self.commit_timestamp).astimezone(pytz.UTC)
+        return datetime.fromtimestamp(self.commit_timestamp).astimezone(UTC_TIMEZONE)
 
     @property
     def ref_names(self):

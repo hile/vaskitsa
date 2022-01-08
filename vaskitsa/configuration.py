@@ -6,7 +6,7 @@ import os
 
 from pathlib import Path
 
-from cli_toolkit.configuration import YamlConfiguration
+from sys_toolkit.configuration import YamlConfiguration
 
 from .documentation.configuration import DocumentationConfiguration
 from .documentation.sphinx.configuration import SphinxConfiguration

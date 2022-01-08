@@ -4,7 +4,7 @@ Visual studio code workspace configuration folder list
 
 from pathlib import Path
 
-from cli_toolkit.configuration import ConfigurationList, ConfigurationSection
+from sys_toolkit.configuration.base import ConfigurationList, ConfigurationSection
 
 
 class WorkspaceFolder(ConfigurationSection):
