@@ -31,6 +31,8 @@ DEFAULT_IGNORED_PACKAGES = (
     'wheel',
 )
 
+ARTIFACT_REGISTRY_PATTERN = r'^https://[a-z0-9-]+-python.pkg.dev/.*$'
+
 
 class PythonRepository:
     """
@@ -57,7 +59,7 @@ class GoogleArtifactRegistry(PythonRepository):
     """
     Google artifact repository parameters
     """
-    pattern = re.compile(r'^https://[a-z0-9-]+-python.pkg.dev/.*$')
+    pattern = re.compile(ARTIFACT_REGISTRY_PATTERN)
     clear_env = True
     required_packages = ARTIFACT_REGISTRY_PACKAGES
 
