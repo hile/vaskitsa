@@ -24,6 +24,5 @@ Python package documentation for all packages in repository
     vaskitsa/hooks/python/index
     vaskitsa/templates/index
     vaskitsa/templates/django/project/project_name/settings/index
-    vaskitsa/vscode/index
     vaskitsa/django/index
     vaskitsa/git/index

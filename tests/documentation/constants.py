@@ -30,7 +30,6 @@ EXPECTED_MODULES = (
     'vaskitsa/python/requirements',
     'vaskitsa/templates',
     'vaskitsa/templates/django',
-    'vaskitsa/vscode',
 )
 EXPECTED_TEST_MODULES = (
     'tests',
