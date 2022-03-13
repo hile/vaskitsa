@@ -159,8 +159,11 @@ class Package(RepositoryTree):
 
     def get_python_module(self, name):
         """
-        Get python module by name
+        Get python module by relative path with root module name
         """
+        if not self.__module_index__:
+            self.detect_python_modules()
+
         relative_path = str(self.joinpath(name).relative_to(self))
         try:
             return self.__module_index__[relative_path]

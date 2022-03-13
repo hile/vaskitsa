@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 
 from ..exceptions import PythonSetupError
 from .requirements import RequirementsFile
-from .virtualenv import VirtualEnv
+from .venv import VirtualEnv
 
 DEFAULT_PYTHON_COMMAND = 'python3'
 UPLOAD_VENV_DIRECTORY = 'update'

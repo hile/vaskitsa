@@ -39,7 +39,11 @@ EXPECTED_TEST_MODULES = (
     'tests/documentation/testdata/test-module-no-indexes/a',
     'tests/documentation/testdata/test-module-no-indexes/b',
     'tests/documentation/testdata/test-module-no-indexes/c',
-    'tests/documentation'
+    'tests/documentation',
+    'tests/mock/mock-python-module/mock_python_module',
+    'tests/mock/mock-python-module/mock_python_module/demo',
+    'tests/mock/mock-python-module/unittests',
+    'tests/python',
 )
 
 # Ignore testdata directory

@@ -50,7 +50,7 @@ class VirtualEnv:
             return Version(stdout[0].replace('Python ', ''))
         except CommandError as error:
             raise PythonSetupError(
-                f'Error checking python version for {self.python_version}: {error}'
+                f'Error checking python version for {self.python_command}: {error}'
             ) from error
 
     def create(self):

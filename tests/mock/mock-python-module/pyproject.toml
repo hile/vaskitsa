@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "mock-python-module"
+description = "Mock a python module for vaskitsa unit tests"
+version = "0.1.2"
+license = "PSF"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+tox = "^3"
+
+[build-system]
+requires = ["poetry-core>=1.0.8"]
+build-backend = "poetry.core.masonry.api"
