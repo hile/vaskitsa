@@ -73,14 +73,14 @@ class Configuration(YamlConfiguration):
         return self.__tree_instances__['git']
 
     @property
-    def python_repository(self):
+    def python_package(self):
         """
-        Return python repository for directory
+        Return python package for directory
         """
         # pylint: disable=import-outside-toplevel,cyclic-import
-        from .python.repository import Repository
+        from .python.package import Package
         if 'python' not in self.__tree_instances__:
-            self.__tree_instances__['python'] = Repository(
+            self.__tree_instances__['python'] = Package(
                 self.__path__.parent,
                 configuration=self
             )
@@ -92,9 +92,9 @@ class Configuration(YamlConfiguration):
         Return sphinx document generator for directory
         """
         # pylint: disable=import-outside-toplevel,cyclic-import
-        from .documentation.sphinx.repository import AutodocRepositoryGenerator
+        from .documentation.sphinx.package import AutodocPackageGenerator
         if 'sphinx_generator' not in self.__tree_instances__:
-            self.__tree_instances__['sphinx_generator'] = AutodocRepositoryGenerator(
+            self.__tree_instances__['sphinx_generator'] = AutodocPackageGenerator(
                 self.__path__.parent,
                 configuration=self
             )

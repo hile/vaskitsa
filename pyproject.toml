@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vaskitsa"
-version = "2.0.0"
+version = "2.2.0"
 description = "Source code management and documentation maintenance tools"
 authors = ["Ilkka Tuohela <hile@iki.fi>"]
 license = "PSF"
@@ -19,11 +19,12 @@ classifiers = [
 vaskitsa = "vaskitsa.bin.main:main"
 
 [tool.poetry.dependencies]
-python = "^3.6"
-pathlib-tree = "^2.0.0"
-Jinja2 = "^3.0.2"
-requests = "^2.26.0"
-packaging = "^21.3"
+python = "^3.10"
+pathlib-tree = "^2"
+Jinja2 = "^3.0"
+requests = "^2"
+packaging = "^21"
+toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]
 coverage = "6.1.2"
@@ -37,6 +38,5 @@ pytest = "6.2.5"
 tox = "3.24.4"
 
 [build-system]
-# requires = ["poetry-core>=1.0.0"]
-requires = ["poetry-core @ git+https://github.com/python-poetry/poetry-core.git@master"]
+requires = ["poetry-core>=1.0.8"]
 build-backend = "poetry.core.masonry.api"

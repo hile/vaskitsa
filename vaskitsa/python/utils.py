@@ -10,17 +10,6 @@ from pathlib import Path
 import inflection
 
 
-def detect_repository_module_name(repository):
-    """
-    Set main module name using specified value or if not specified, deduce from
-    repository folder name
-    """
-    module_name = inflection.underscore(repository.name)
-    if '-' in module_name:
-        module_name = module_name.replace('-', '_')
-    return module_name
-
-
 def is_python_module_directory(directory):
     """
     Checks if directory is python module directory
@@ -40,9 +29,20 @@ def is_python_module_directory(directory):
     return False
 
 
-def detect_python_repository_path(directory=None):
+def detect_package_module_name(repository):
     """
-    Directory repository root from python code directory
+    Set main module name using specified value or if not specified, deduce from
+    repository folder name
+    """
+    module_name = inflection.underscore(repository.name)
+    if '-' in module_name:
+        module_name = module_name.replace('-', '_')
+    return module_name
+
+
+def detect_python_package_path(directory=None):
+    """
+    Directory package root from python code directory
     """
     if directory is not None:
         directory = Path(directory)

@@ -16,7 +16,7 @@ def test_module_load_self_no_module():
     Test loading itself as File without linking to module
     """
     testcase = PythonModule(Path(__file__).parent)
-    assert testcase.repository is None
+    assert testcase.package is None
     assert testcase.relative_directory is None
 
 

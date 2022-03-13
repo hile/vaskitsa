@@ -2,12 +2,12 @@
 from pathlib import Path
 
 from ..renderers.sphinx import SphinxTemplateRenderer
-from ..repository import RepositoryDocumentGenerator
+from ..package import PackageDocumentGenerator
 
 from .module import AutodocModuleGenerator
 
 
-class AutodocRepositoryGenerator(RepositoryDocumentGenerator):
+class AutodocPackageGenerator(PackageDocumentGenerator):
     """
     Autodoc generator for python repository
     """

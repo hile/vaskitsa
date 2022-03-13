@@ -38,8 +38,8 @@ class PythonFile:
         """
         Return path relative to package
         """
-        if self.module and self.module.repository:
-            return self.path.relative_to(self.module.repository)
+        if self.module and self.module.package:
+            return self.path.relative_to(self.module.package)
         return None
 
     @property
@@ -88,7 +88,7 @@ class PythonFile:
 
     def debug(self, *args):
         """
-        Pass debug message to repository
+        Pass debug message to parent
         """
         if self.module:
             return self.module.debug(*args)
@@ -96,7 +96,7 @@ class PythonFile:
 
     def error(self, *args):
         """
-        Pass error message to repository
+        Pass error message to parent
         """
         if self.module:
             return self.module.error(*args)
@@ -104,7 +104,7 @@ class PythonFile:
 
     def message(self, *args):
         """
-        Pass messages to repository
+        Pass messages to parent
         """
         if self.module:
             return self.module.message(*args)

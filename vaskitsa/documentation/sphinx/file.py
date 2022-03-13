@@ -16,21 +16,21 @@ class AutoModuleFileGenerator(FileDocumentGenerator):
 
         By default returns None
         """
-        return self.module.repository.template_directory
+        return self.module.package.template_directory
 
     @property
     def template_name(self):
         """
         Return template name for module documentation
         """
-        return self.module.repository.template_configuration.templates.file
+        return self.module.package.template_configuration.templates.file
 
     @property
     def automodule_flags(self):
         """
         Generate list of automodule flags, indented with 4 spaces
         """
-        flags = self.module.repository.template_configuration.automodule_flags
+        flags = self.module.package.template_configuration.automodule_flags
         return [f':{flag}:' for flag in flags]
 
     @property

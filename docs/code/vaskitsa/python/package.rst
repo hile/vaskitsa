@@ -1,7 +1,7 @@
-vaskitsa.python.repository
+vaskitsa.python.package
 ##########################
 
-.. automodule:: vaskitsa.python.repository
+.. automodule:: vaskitsa.python.package
     :members:
     :undoc-members:
     :inherited-members:

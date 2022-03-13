@@ -24,7 +24,7 @@ class ModuleDocumentGenerator(PythonModule, TemplateGenerator):
         """
         Template loader class from package
         """
-        return self.repository.template_loader
+        return self.package.template_loader
 
     def get_output_filename(self, directory):
         """

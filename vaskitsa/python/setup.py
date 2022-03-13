@@ -9,8 +9,8 @@ class TestEnvironment:
     """
     Setup settings for testenv
     """
-    def __init__(self, repository, settings):
-        self.repository = repository
+    def __init__(self, package, settings):
+        self.package = package
         self.settings = settings
 
     @staticmethod
@@ -43,12 +43,12 @@ class TestEnvironment:
 
 class SetupConfig(ConfigParser):
     """
-    Parser for setup.cfg file in python repository
+    Parser for setup.cfg file in python package
     """
-    def __init__(self, repository):
+    def __init__(self, package):
         super().__init__()
-        self.repository = repository
-        self.path = self.repository.joinpath('setup.cfg')
+        self.package = package
+        self.path = self.package.joinpath('setup.cfg')
         if self.path.is_file():
             if not self.read(self.path):
                 raise PythonSetupError(f'Error loading {self.path}')
@@ -67,8 +67,8 @@ class SetupConfig(ConfigParser):
         Return testenv settings parsed with TestEnvironment class
         """
         if 'testenv' not in self:
-            raise PythonSetupError(f'testenv not configuredd in {self.path}')
-        return TestEnvironment(self.repository, self['testenv'])
+            raise PythonSetupError(f'testenv not configured in {self.path}')
+        return TestEnvironment(self.package, self['testenv'])
 
     def keys(self):
         """

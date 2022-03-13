@@ -1,5 +1,5 @@
 """
-Unit tests for loading code repository
+Unit tests for loading code package documentation
 """
 
 import sys
@@ -9,7 +9,7 @@ import pytest
 
 from pathlib_tree.tree import Tree
 
-from vaskitsa.documentation.repository import RepositoryDocumentGenerator
+from vaskitsa.documentation.package import PackageDocumentGenerator
 from vaskitsa.templates.template import TemplateRenderer
 
 from .constants import (
@@ -38,11 +38,11 @@ def validate_missing_message_callbacks(item):
     assert not mock_stderr.called
 
 
-def test_repository_load_self():
+def test_package_document_generator_load_self():
     """
     Load systematic-doc-generator source code as plain repository
     """
-    repository = RepositoryDocumentGenerator(REPO_ROOT_PATH, excluded=EXCLUDED)
+    repository = PackageDocumentGenerator(REPO_ROOT_PATH, excluded=EXCLUDED)
     print(repository.python_modules)
     assert len(repository.python_modules) == len(EXPECTED_MODULES)
     assert len(repository.python_test_modules) == len(EXPECTED_TEST_MODULES)
@@ -73,12 +73,12 @@ def test_repository_load_self():
                 item.get_output_filename('/tmp')
 
 
-def test_repository_load_no_init():
+def test_package_document_generator_load_no_init():
     """
     Test loading the test repository without init files in
     submodules
     """
-    repository = RepositoryDocumentGenerator(NO_INIT_PATH)
+    repository = PackageDocumentGenerator(NO_INIT_PATH)
     print(repository.python_modules)
     assert len(repository.python_modules) == 3
     assert len(repository.python_files) == 3
@@ -87,11 +87,11 @@ def test_repository_load_no_init():
         validate_module(module, renderer=TemplateRenderer)
 
 
-def test_repository_generate_exception():
+def test_package_document_generator_generate_exception():
     """
     Test generating a bare repository documentation fails
     """
-    repository = RepositoryDocumentGenerator(NO_INIT_PATH)
+    repository = PackageDocumentGenerator(NO_INIT_PATH)
     docs_directory = repository.default_output_directory
     if docs_directory.exists():
         Tree(docs_directory).remove(recursive=True)

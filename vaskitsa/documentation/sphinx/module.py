@@ -17,7 +17,7 @@ class AutodocModuleGenerator(ModuleDocumentGenerator):
         """
         Return index max depth for module documentation TOC
         """
-        return self.repository.template_configuration.module_index_max_depth
+        return self.package.template_configuration.module_index_max_depth
 
     @property
     def template_directory(self):
@@ -26,14 +26,14 @@ class AutodocModuleGenerator(ModuleDocumentGenerator):
 
         By default returns None
         """
-        return self.repository.template_directory
+        return self.package.template_directory
 
     @property
     def template_name(self):
         """
         Return template name for module documentation
         """
-        return self.repository.template_configuration.templates.module
+        return self.package.template_configuration.templates.module
 
     @property
     def caption(self):

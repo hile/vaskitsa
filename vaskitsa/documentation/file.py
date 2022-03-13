@@ -19,7 +19,7 @@ class FileDocumentGenerator(PythonFile, TemplateGenerator):
         """
         Template loader class from package
         """
-        return self.module.repository.template_loader
+        return self.module.package.template_loader
 
     def get_output_filename(self, directory):
         """

@@ -1,40 +1,83 @@
+"""
+Parsing of python package version from various places
+"""
 
 from packaging.version import Version, InvalidVersion
 
 from pathlib_tree.tree import FilesystemError
 
-from .constants import DUMMY_VERSION, RE_VERSION_LINE
+import toml
+
+from .constants import DUMMY_VERSION, PYPROJECT_TOML_FILE, RE_VERSION_LINE, VersionTypes
 from .utils import validate_module_name
 
 
-class PythonRepositoryVersion(Version):
+class PythonPackageVersion(Version):
     """
-    Class to handle repository version parsing and updating
+    Class to handle package version parsing and updating
     """
 
-    def __init__(self, repository, main_module_name=None):
-        self.repository = repository
+    def __init__(self, package, main_module_name=None):
+        self.package = package
         if main_module_name is None:
-            main_module_name = validate_module_name(
-                repository.name.replace('-', '_')
-            )
+            main_module_name = validate_module_name(package.name.replace('-', '_'))
         self.main_module_name = validate_module_name(main_module_name)
+        self.version_type = None
         super().__init__(self.__load__())
 
-    def __load__(self):
+    def __get_peotry_tool_section__(self):
         """
-        Read version string from __init__.py variable __version__
+        Get poetry setting section from pyproject.toml file
+
+        Returns empty dictionary if configuration is not found in file
         """
-        module = self.repository.get_module(self.main_module_name)
+        path = self.package.joinpath(PYPROJECT_TOML_FILE)
+        if not path.is_file():
+            return {}
+        with path.open('r', encoding='utf-8') as filedescriptor:
+            return toml.loads(filedescriptor.read()).get('tool', {}).get('poetry', {})
+
+    def __load_poetry_version__(self):
+        """
+        Load poetry version from pyproject.toml file
+        """
+        poetry = self.__get_peotry_tool_section__()
+        if poetry:
+            value = poetry.get('version', None)
+            if value is not None:
+                self.version_type = VersionTypes.POETRY
+                return value
+        return None
+
+    def __load_module_version__(self):
+        """
+        Read version string from pyproject.toml file or __init__.py variable __version__
+        """
+        module = self.package.get_python_module(self.main_module_name)
         if module and module.index:
             with open(module.index.path, 'r', encoding='utf-8') as filedescriptor:
                 for line in filedescriptor.readlines():
                     match = RE_VERSION_LINE.match(line)
                     if match:
+                        self.version_type = VersionTypes.MODULE
                         return match.groupdict()['version']
+        return None
+
+    def __load__(self):
+        """
+        Load version string from known sources
+        """
+        loaders = (
+            self.__load_poetry_version__,
+            self.__load_module_version__,
+        )
+        for loader in loaders:
+            version = loader()
+            if version is not None:
+                return version
         return DUMMY_VERSION
 
-    def update(self, version):
+    def update_module_version(self, version):
         """
         Update new version to the version __init__.py __version__ field
         """
@@ -44,9 +87,9 @@ class PythonRepositoryVersion(Version):
             raise InvalidVersion(
                 f'New version {version} is smaller or same as previous version {self}'
             )
-        module = self.repository.get_module(self.main_module_name)
+        module = self.package.get_python_module(self.main_module_name)
         if not module:
-            raise FilesystemError('Repository has no main module')
+            raise FilesystemError('package has no main module')
         if not module.index:
             module.create_file('__init__.py')
 

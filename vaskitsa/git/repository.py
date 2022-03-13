@@ -90,6 +90,17 @@ class GitRepository(RepositoryTree):
             raise GitError(f'Repository has no commits: {self}')
         return run_git_command(*args, cwd=self)
 
+    def get_revision(self, characters=None):
+        """
+        Get git revision for current branch HEAD
+
+        If characters is specified return first <characters> letters
+        """
+        value = self.head.commit_hash
+        if characters is not None:
+            return value[:characters]
+        return value
+
     def get_commit(self, reference):
         """
         Get GitCommit object for specified git reference

@@ -25,10 +25,10 @@ class PythonModule(Tree):
         return str(self.relative_directory)
 
     # pylint: disable=redefined-builtin
-    def __init__(self, path, repository=None, group=None, create_missing=False,
+    def __init__(self, path, package=None, group=None, create_missing=False,
                  sorted=True, mode=None, excluded=None):
         super().__init__(path, create_missing=False, sorted=sorted, mode=mode, excluded=excluded)
-        self.repository = repository
+        self.package = package
         self.group = group
         if not self.is_dir() and create_missing:
             self.mkdir(parents=True)
@@ -36,27 +36,27 @@ class PythonModule(Tree):
         self.load_files()
 
     @classmethod
-    def create_module(cls, path, repository=None, group=MODULE_DEFAULT_GROUP):
+    def create_module(cls, path, package=None, group=MODULE_DEFAULT_GROUP):
         """
-        Create module to repository
+        Create module to package
 
         Initializes __init__.py as side effect
         """
         if not isinstance(path, (Path, str)):
             raise ValueError('create_module() path must be str or Path instance')
 
-        if repository and isinstance(path, str):
-            path = repository.joinpath(path)
+        if package and isinstance(path, str):
+            path = package.joinpath(path)
 
         try:
-            path.relative_to(repository)
+            path.relative_to(package)
         except ValueError as error:
-            raise ValueError(f'create_module() path is not not under {repository}') from error
+            raise ValueError(f'create_module() path is not not under {package}') from error
 
         if path.exists() and not path.is_dir():
             raise ValueError(f'create_module() path is not directory: {path}')
 
-        module = cls(path, repository=repository, group=group, create_missing=True)
+        module = cls(path, package=package, group=group, create_missing=True)
         module.create_file('__init__')
         return module
 
@@ -65,13 +65,13 @@ class PythonModule(Tree):
         """
         Return module parent as Module
         """
-        if not self.repository:
+        if not self.package:
             return None
-        item = self.repository.joinpath(super().parent)
-        for module in self.repository.python_modules:
+        item = self.package.joinpath(super().parent)
+        for module in self.package.python_modules:
             if item == module:
                 return module
-        return self.repository
+        return self.package
 
     @property
     def index(self):
@@ -88,8 +88,8 @@ class PythonModule(Tree):
         """
         Return relative parent directory to package root
         """
-        if self.repository:
-            return Path(self.relative_to(self.repository))
+        if self.package:
+            return Path(self.relative_to(self.package))
         return None
 
     @property
@@ -104,26 +104,26 @@ class PythonModule(Tree):
 
     def debug(self, *args):
         """
-        Pass debug message to repository
+        Pass debug message to parent
         """
-        if self.repository:
-            return self.repository.debug(*args)
+        if self.package:
+            return self.package.debug(*args)
         raise FilesystemError('Module not linked to a package')
 
     def error(self, *args):
         """
-        Pass error message to repository
+        Pass error message to parent
         """
-        if self.repository:
-            return self.repository.error(*args)
+        if self.package:
+            return self.package.error(*args)
         raise FilesystemError('Module not linked to a package')
 
     def message(self, *args):
         """
-        Pass messages to repository
+        Pass messages to parent
         """
-        if self.repository:
-            return self.repository.message(*args)
+        if self.package:
+            return self.package.message(*args)
         raise FilesystemError('Module not linked to a package')
 
     def load_files(self):

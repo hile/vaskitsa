@@ -1,5 +1,5 @@
 """
-Unit tests for loading code repository
+Unit tests for loading code package
 """
 
 from pathlib import Path
@@ -7,7 +7,7 @@ from pathlib import Path
 from jinja2 import Environment, Template
 
 from vaskitsa.documentation.loader import get_processor
-from vaskitsa.documentation.sphinx.repository import AutodocRepositoryGenerator
+from vaskitsa.documentation.sphinx.package import AutodocPackageGenerator
 from vaskitsa.documentation.renderers.sphinx import SphinxTemplateRenderer
 
 from .constants import EXPECTED_MODULES, EXCLUDED, REPO_ROOT_PATH
@@ -51,7 +51,7 @@ def test_repository_load_sphinx_self():
     output_prefix = Path('/tmp/doctest')
 
     repository = get_processor('sphinx', REPO_ROOT_PATH, excluded=EXCLUDED)
-    assert isinstance(repository, AutodocRepositoryGenerator)
+    assert isinstance(repository, AutodocPackageGenerator)
     assert isinstance(repository.__repr__(), str)
     assert len(repository.python_modules) == len(EXPECTED_MODULES)
     validate_relative_path(

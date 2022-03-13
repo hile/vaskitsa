@@ -1,12 +1,12 @@
 
-from vaskitsa.documentation.repository import RepositoryDocumentGenerator
+from vaskitsa.documentation.package import PackageDocumentGenerator
 
 from .base import AutodocGeneratorCommand
 
 
 class List(AutodocGeneratorCommand):
     """
-    List files or modules in python repository
+    List files or modules in python package
     """
     name = 'list'
     usage = 'python-autodoc-generator list <args>'
@@ -39,7 +39,7 @@ class List(AutodocGeneratorCommand):
         """
         List files to be used in documentation auto generation
         """
-        package = RepositoryDocumentGenerator(args.repository)
+        package = PackageDocumentGenerator(args.repository)
         if args.output_mode == 'files':
             self.list_package_files(package)
         if args.output_mode == 'modules':

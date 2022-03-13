@@ -5,19 +5,19 @@ Python code repository documentation with modules
 from pathlib import Path
 
 from ..templates.template import TemplateRenderer
-from ..python.repository import Repository
+from ..python.package import Package
 
 from .base import TemplateGenerator
 from .configuration import DEFAULT_DOCUMENTS_PATH
 from .module import ModuleDocumentGenerator
 
 
-class RepositoryDocumentGenerator(Repository, TemplateGenerator):
+class PackageDocumentGenerator(Package, TemplateGenerator):
     """
-    Repository document generator
+    Package document generator
     """
     python_module_class = ModuleDocumentGenerator
-    """Module documentation generator class"""
+    """Package documentation generator class"""
 
     template_loader = TemplateRenderer
     """Class for jinja2 template rendering"""

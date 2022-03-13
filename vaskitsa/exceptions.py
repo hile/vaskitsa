@@ -16,3 +16,9 @@ class PythonSetupError(Exception):
     """
     Exceptions processing setup.py an setup.cfg files
     """
+
+
+class RepositoryConfigurationError(Exception):
+    """
+    Errors parsing repository configuration
+    """
