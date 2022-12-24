@@ -10,6 +10,7 @@ from .base import TroveClassifierGroup
 from .development_status import DevelopmentStatusGroup
 
 CLASSIFIERS_URL = 'https://pypi.org/pypi?%3Aaction=list_classifiers'
+CLASSIFIERS_LOOKUP_TIMEOUT = 15
 
 
 class Classifiers(Collection):
@@ -43,7 +44,7 @@ class Classifiers(Collection):
         """
         Loads classifiers from pypi.org
         """
-        res = requests.get(CLASSIFIERS_URL)
+        res = requests.get(CLASSIFIERS_URL, timeout=CLASSIFIERS_LOOKUP_TIMEOUT)
         if res.status_code != 200:
             raise ValueError(
                 f'Error fetching classifiers from {CLASSIFIERS_URL}: '

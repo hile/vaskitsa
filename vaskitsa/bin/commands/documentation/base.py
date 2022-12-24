@@ -7,8 +7,7 @@ class AutodocGeneratorCommand(Command):
     Common base class for python-autodoc-generator subcommands
     """
 
-    @staticmethod
-    def register_parser_arguments(parser):
+    def register_parser_arguments(self, parser):
         """
         Register common arguments for python-autodoc-generator subcommands
         """

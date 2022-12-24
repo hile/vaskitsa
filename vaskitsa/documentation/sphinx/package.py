@@ -43,8 +43,7 @@ class AutodocPackageGenerator(PackageDocumentGenerator):
         """
         return self.template_configuration.templates.repository
 
-    @staticmethod
-    def get_output_filename(directory):
+    def get_output_filename(self, directory):
         """
         Return output filename for generated documentation index file
         """
