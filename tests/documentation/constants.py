@@ -13,11 +13,6 @@ NO_INIT_PATH = Path(__file__).parent.joinpath('testdata/test-module-no-indexes')
 # Packages expected in loading this repository
 EXPECTED_MODULES = (
     'vaskitsa',
-    'vaskitsa/bin',
-    'vaskitsa/bin/commands',
-    'vaskitsa/bin/commands/documentation',
-    'vaskitsa/bin/commands/python',
-    'vaskitsa/bin/commands/version',
     'vaskitsa/django',
     'vaskitsa/documentation',
     'vaskitsa/documentation/renderers',
@@ -33,7 +28,6 @@ EXPECTED_MODULES = (
 )
 EXPECTED_TEST_MODULES = (
     'tests',
-    'tests/cli',
     'tests/git',
     'tests/documentation/testdata/test-module-no-indexes/a',
     'tests/documentation/testdata/test-module-no-indexes/b',

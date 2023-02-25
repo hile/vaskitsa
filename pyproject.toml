@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-vaskitsa = "vaskitsa.bin.main:main"
+# vaskitsa = "vaskitsa.bin.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
