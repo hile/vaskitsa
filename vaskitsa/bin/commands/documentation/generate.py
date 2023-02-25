@@ -1,4 +1,6 @@
-
+"""
+CLI subcommand 'vaskitsa documentation generate'
+"""
 from vaskitsa.documentation.loader import (
     get_processor,
     DEFAULT_PROCESSOR,

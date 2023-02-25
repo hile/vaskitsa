@@ -1,8 +1,8 @@
 """
 Load documentation processors
 """
-
 from pathlib import Path
+from typing import List
 
 from ..exceptions import DocumentGeneratorError
 from .sphinx.package import AutodocPackageGenerator
@@ -13,7 +13,12 @@ PROCESSOR_TYPES = (
 )
 
 
-def get_processor(output_type, path, name=None, excluded=list):
+def get_processor(
+        output_type: str,
+        path: Path,
+        name: str = None,
+        excluded: List[str] = list
+     ) -> AutodocPackageGenerator:
     """
     Get package processor for specified documentation type and path
 

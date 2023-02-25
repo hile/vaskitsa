@@ -1,4 +1,6 @@
-
+"""
+CLI subcommand 'vaskitsa documentation list'
+"""
 from vaskitsa.documentation.package import PackageDocumentGenerator
 
 from .base import AutodocGeneratorCommand
@@ -9,7 +11,7 @@ class List(AutodocGeneratorCommand):
     List files or modules in python package
     """
     name = 'list'
-    usage = 'python-autodoc-generator list <args>'
+    usage = 'vaskitsa documentation list <args>'
 
     def register_parser_arguments(self, parser):
         parser = super().register_parser_arguments(parser)

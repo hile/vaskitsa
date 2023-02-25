@@ -1,3 +1,6 @@
+"""
+Various errors raised by vaskitsa code repository module
+"""
 
 
 class DocumentGeneratorError(Exception):

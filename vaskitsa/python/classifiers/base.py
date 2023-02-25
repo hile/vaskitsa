@@ -1,6 +1,7 @@
 """
 Python trove classifiers and classifiers groups
 """
+from typing import Dict, List, Optional
 
 
 # pylint: disable=too-few-public-methods
@@ -8,12 +9,12 @@ class TroveClassifier:
     """
     Base class for trove classifiers
     """
-    def __init__(self, parent, path):
+    def __init__(self, parent, path) -> None:
         self.parent = parent
         self.path = path
         self.name = path[-1]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return ' :: '.join(self.path)
 
 
@@ -22,19 +23,24 @@ class TroveClassifierGroup:
     """
     Base class for Trove classifiers
     """
+    parent: Optional['TroveClassifierGroup']
+    name: str
+    classifiers: List[TroveClassifier]
+    groups: Dict
+
     __group_loader_classes__ = {}
     __classifier_loader_class__ = TroveClassifier
 
-    def __init__(self, name, parent=None):
+    def __init__(self, name: str, parent: Optional['TroveClassifierGroup'] = None) -> None:
         self.parent = parent
         self.name = name
         self.classifiers = []
         self.groups = {}
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.name
 
-    def __get_path__group__(self, path):
+    def __get_path__group__(self, path: List[str]) -> 'TroveClassifierGroup':
         """
         Get group for path
 
@@ -49,7 +55,7 @@ class TroveClassifierGroup:
         return self.groups[name].__get_path__group__(path[1:])
 
     @property
-    def path(self):
+    def path(self) -> List[str]:
         """
         Return trove groups path
         """
@@ -60,7 +66,7 @@ class TroveClassifierGroup:
             parent = parent.parent
         return list(reversed(path))
 
-    def add_classifer(self, path):
+    def add_classifer(self, path: List[str]) -> TroveClassifier:
         """
         Add classifier to group
         """
@@ -69,7 +75,7 @@ class TroveClassifierGroup:
         group.classifiers.append(classifier)
         return classifier
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """
         Returns trove group as dictionary
         """

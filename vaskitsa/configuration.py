@@ -1,16 +1,21 @@
 """
 Parser for code generatation repository configuration
 """
-
 import os
 
 from pathlib import Path
+from typing import Dict, Optional, Union, TYPE_CHECKING
 
 from sys_toolkit.configuration import YamlConfiguration
 
 from .documentation.configuration import DocumentationConfiguration
 from .documentation.sphinx.configuration import SphinxConfiguration
 from .hooks.configuration import HooksConfiguration
+
+if TYPE_CHECKING:
+    from .documentation.sphinx.package import AutodocPackageGenerator
+    from .git.repository import GitRepository
+    from .python.package import Package
 
 REPOSITORY_CONFIGURATION = '.vaskitsa.yml'
 
@@ -30,8 +35,9 @@ DEFAULT_IGNORED_DIRECTORIES = [
 
 class Configuration(YamlConfiguration):
     """
-    Documentation configuration for repository in yml format
+    Documentation configuration for repository in YAML format
     """
+    __tree_instances__: Dict
     __default_settings__ = {
         'ignored_directories': DEFAULT_IGNORED_DIRECTORIES,
         'test_directories': (
@@ -44,7 +50,11 @@ class Configuration(YamlConfiguration):
         SphinxConfiguration,
     )
 
-    def __init__(self, path=None, parent=None, debug_enabled=False, silent=False):
+    def __init__(self,
+                 path: Optional[Union[str, Path]] = None,
+                 parent: 'Configuration' = None,
+                 debug_enabled: bool = False,
+                 silent: bool = False) -> None:
         if path is None:
             path = Path(os.getcwd())
         if not isinstance(path, Path):
@@ -59,7 +69,7 @@ class Configuration(YamlConfiguration):
         self.__tree_instances__ = {}
 
     @property
-    def git_repository(self):
+    def git_repository(self) -> 'GitRepository':
         """
         Return git repository for directory
         """
@@ -73,7 +83,7 @@ class Configuration(YamlConfiguration):
         return self.__tree_instances__['git']
 
     @property
-    def python_package(self):
+    def python_package(self) -> 'Package':
         """
         Return python package for directory
         """
@@ -87,7 +97,7 @@ class Configuration(YamlConfiguration):
         return self.__tree_instances__['python']
 
     @property
-    def sphinx_generator(self):
+    def sphinx_generator(self) -> 'AutodocPackageGenerator':
         """
         Return sphinx document generator for directory
         """

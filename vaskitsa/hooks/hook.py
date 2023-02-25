@@ -1,7 +1,6 @@
 """
 Common hook runnner classes
 """
-
 from cli_toolkit.task import CommandLineTask
 
 

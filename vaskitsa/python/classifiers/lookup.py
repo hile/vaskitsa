@@ -1,12 +1,12 @@
 """
 Python package Trove Classifiers loader
 """
-
 from collections.abc import Collection
+from typing import Dict, List, Optional
 
 import requests
 
-from .base import TroveClassifierGroup
+from .base import TroveClassifier, TroveClassifierGroup
 from .development_status import DevelopmentStatusGroup
 
 CLASSIFIERS_URL = 'https://pypi.org/pypi?%3Aaction=list_classifiers'
@@ -17,17 +17,17 @@ class Classifiers(Collection):
     """
     Singleton class to load and validate python trove classifiers
     """
-    __classifiers__ = None
+    __classifiers__: Optional[List[TroveClassifier]] = None
     __group_loader_classes__ = {
         'Development Status': DevelopmentStatusGroup,
     }
-    groups = {}
+    groups: Dict = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         if Classifiers.__classifiers__ is None:
             Classifiers.__classifiers__ = Classifiers.__load_classifiers__(self)
 
-    def __parse_classifier_topic_line__(self, line):
+    def __parse_classifier_topic_line__(self, line: str) -> TroveClassifier:
         """
         Parse a classifier from line
         """
@@ -40,7 +40,7 @@ class Classifiers(Collection):
             self.groups[group] = loader(group)
         return self.groups[group].add_classifer(path)
 
-    def __load_classifiers__(self):
+    def __load_classifiers__(self) -> List[str]:
         """
         Loads classifiers from pypi.org
         """
@@ -58,19 +58,19 @@ class Classifiers(Collection):
                 classifiers.append(classifier)
         return classifiers
 
-    def __contains__(self, item):
+    def __contains__(self, item: str) -> bool:
         return item in self.__classifiers__
 
     def __iter__(self):
         return iter(self.__classifiers__)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.__classifiers__)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> str:
         return self.__classifiers__[index]
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """
         Return classifier data as dictionary
         """

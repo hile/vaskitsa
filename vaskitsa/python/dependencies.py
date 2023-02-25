@@ -1,12 +1,13 @@
 """
 Python package dependencies processor
 """
-
 import os
 import re
 
 from pathlib import Path
+from subprocess import CompletedProcess
 from tempfile import TemporaryDirectory
+from typing import List, Optional, Tuple, Union
 
 from ..exceptions import PythonSetupError
 from .requirements import RequirementsFile
@@ -31,19 +32,19 @@ DEFAULT_IGNORED_PACKAGES = (
     'wheel',
 )
 
-ARTIFACT_REGISTRY_PATTERN = r'^https://[a-z0-9-]+-python.pkg.dev/.*$'
+GOOGLE_ARTIFACT_REGISTRY_PATTERN = r'^https://[a-z0-9-]+-python.pkg.dev/.*$'
 
 
 class PythonRepository:
     """
     Base class for python package registries
     """
-    pattern = None
-    clear_env = False
-    environment_packages = UPLOAD_ENVIRONMENT_PACKAGES
-    required_packages = []
+    pattern: Optional[str] = None
+    clear_env: bool = False
+    environment_packages: Tuple[str] = UPLOAD_ENVIRONMENT_PACKAGES
+    required_packages: Tuple[str]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Generic PyPI registry'
 
     def install_packages(self, virtualenv):
@@ -59,11 +60,11 @@ class GoogleArtifactRegistry(PythonRepository):
     """
     Google artifact repository parameters
     """
-    pattern = re.compile(ARTIFACT_REGISTRY_PATTERN)
-    clear_env = True
-    required_packages = ARTIFACT_REGISTRY_PACKAGES
+    pattern: str = re.compile(GOOGLE_ARTIFACT_REGISTRY_PATTERN)
+    clear_env: bool = True
+    required_packages: Tuple[str] = ARTIFACT_REGISTRY_PACKAGES
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'Google Artifact Registry'
 
 
@@ -71,11 +72,18 @@ class DependenciesProcessor:
     """
     Processor for python package dependencies
     """
-    __repository_loaders__ = (
+    __repository_loaders__: Tuple[PythonRepository] = (
         GoogleArtifactRegistry,
     )
+    __cache_directory__: TemporaryDirectory
+    python_command: str
+    ignored: Tuple[str]
+    __upload_virtulenv__: Optional[VirtualEnv]
+    __virtulenv__: Optional[VirtualEnv]
 
-    def __init__(self, python_command=DEFAULT_PYTHON_COMMAND, ignored=DEFAULT_IGNORED_PACKAGES):
+    def __init__(self,
+                 python_command: str = DEFAULT_PYTHON_COMMAND,
+                 ignored: Tuple[str] = DEFAULT_IGNORED_PACKAGES) -> None:
         self.python_command = python_command
         # pylint: disable=consider-using-with
         self.__cache_directory__ = TemporaryDirectory()
@@ -83,7 +91,7 @@ class DependenciesProcessor:
         self.__virtulenv__ = None
         self.__upload_virtulenv__ = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.cache_directory)
 
     @property
@@ -94,7 +102,7 @@ class DependenciesProcessor:
         return Path(self.__cache_directory__.name)
 
     @property
-    def packages_directory(self):
+    def packages_directory(self) -> Path:
         """
         Directory for downloaded packages
         """
@@ -124,19 +132,19 @@ class DependenciesProcessor:
             )
         return self.__virtulenv__
 
-    def install_editable(self, paths: list):
+    def install_editable(self, paths: List[Union[str, Path]] = list) -> CompletedProcess:
         """
         Install python package as editable dependency to processor virtualenv
         """
         return self.virtualenv.install_editable(paths)
 
-    def install_packages(self, paths: list):
+    def install_packages(self, paths: List[Union[str, Path]] = list) -> CompletedProcess:
         """
         Install python packages to processor virtualenv
         """
         return self.virtualenv.install_packages(paths)
 
-    def install_requirement(self, paths: list):
+    def install_requirement(self, paths: List[Union[str, Path]] = list) -> CompletedProcess:
         """
         Install python requirements lists to processor virtualenv
         """
@@ -159,7 +167,7 @@ class DependenciesProcessor:
         requirements.load()
         return requirements
 
-    def download_requirements(self, requirements=None) -> Path:
+    def download_requirements(self, requirements: Optional[Union[str, Path]] = None) -> Path:
         """
         Download requirements specified in requirements file to local cache directory
         """
@@ -171,9 +179,9 @@ class DependenciesProcessor:
             f'--requirement={requirements}'
         )
 
-    def get_repository_loader(self, repository):
+    def get_repository_loader(self, repository: str) -> PythonRepository:
         """
-        Match artifact registry
+        Match artifact registry by repository name string
         """
         for loader_class in self.__repository_loaders__:
             loader = loader_class()
@@ -182,7 +190,7 @@ class DependenciesProcessor:
                 return loader
         return PythonRepository()
 
-    def setup_upload_environment(self, repository):
+    def setup_upload_environment(self, repository: str) -> PythonRepository:
         """
         Set up pacakges for upload environment
         """
@@ -192,7 +200,9 @@ class DependenciesProcessor:
         return loader
 
     @staticmethod
-    def get_clear_upload_env(clear_env=False, clear_vars=None) -> dict:
+    def get_clear_upload_env(
+            clear_env: bool = False,
+            clear_vars: Optional[List[str]] = None) -> dict:
         """
         Get environment without upload twine variables
         """
@@ -210,12 +220,12 @@ class DependenciesProcessor:
                     del env[var]
         return env
 
-    def remove_ignored_packages(self):
+    def remove_ignored_packages(self) -> None:
         """
-        Remove ignored packages from the download directory to avoid uploading the packages
-        with twine
+        Remove ignored packages from the download directory to avoid
+        uploading the packages with twine
         """
-        def match_ignored(name):
+        def match_ignored(name) -> bool:
             """
             Match package filename to ignore file lists
             """
@@ -232,7 +242,10 @@ class DependenciesProcessor:
             if match_ignored(package.name):
                 package.unlink()
 
-    def upload_to_repository(self, repository, clear_vars=None):
+    def upload_to_repository(
+            self,
+            repository: str,
+            clear_vars: Optional[List[str]] = None) -> CompletedProcess:
         """
         Upload packages to specified repository with twine
         """

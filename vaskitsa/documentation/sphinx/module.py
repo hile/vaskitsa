@@ -1,5 +1,8 @@
-
+"""
+Module in python documentation tree sphinx documentation
+"""
 from pathlib import Path
+from typing import List, Union
 
 from ..module import ModuleDocumentGenerator
 from .file import AutoModuleFileGenerator
@@ -13,14 +16,14 @@ class AutodocModuleGenerator(ModuleDocumentGenerator):
     """Class for loading python files from autodoc module"""
 
     @property
-    def index_max_depth(self):
+    def index_max_depth(self) -> int:
         """
         Return index max depth for module documentation TOC
         """
         return self.package.template_configuration.module_index_max_depth
 
     @property
-    def template_directory(self):
+    def template_directory(self) -> Path:
         """
         Return directory for templates from configuration
 
@@ -29,21 +32,21 @@ class AutodocModuleGenerator(ModuleDocumentGenerator):
         return self.package.template_directory
 
     @property
-    def template_name(self):
+    def template_name(self) -> str:
         """
         Return template name for module documentation
         """
         return self.package.template_configuration.templates.module
 
     @property
-    def caption(self):
+    def caption(self) -> str:
         """
         Caption for module index
         """
         return str(self.relative_directory)
 
     @property
-    def file_import_paths(self):
+    def file_import_paths(self) -> List[Path]:
         """
         Return file import paths in TOC format
         """
@@ -52,7 +55,7 @@ class AutodocModuleGenerator(ModuleDocumentGenerator):
             for item in self.files
         ]
 
-    def get_output_filename(self, directory):
+    def get_output_filename(self, directory: Union[str, Path]) -> Path:
         """
         Return output filename for generated module index
         """

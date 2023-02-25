@@ -1,13 +1,19 @@
 """
 Git commit in a repository
 """
-
 import json
 from datetime import datetime
+from typing import List, TYPE_CHECKING
 from zoneinfo import ZoneInfo
 
 from sys_toolkit.encoders import DateTimeEncoder
 
+if TYPE_CHECKING:
+    from .changeset import GitChangeSet
+    from .repository import GitRepository
+
+DEFAULT_JSON_INDENT = 2
+DEFAULT_REVISION = 'HEAD'
 UTC_TIMEZONE = ZoneInfo('UTC')
 
 
@@ -15,14 +21,17 @@ class GitCommit:
     """
     Git commit for repository
     """
-    def __init__(self, repository, revision='HEAD'):
+    repository: 'GitRepository'
+    revision: str
+
+    def __init__(self, repository: 'GitRepository', revision: str = DEFAULT_REVISION):
         self.repository = repository
         self.revision = revision
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.revision
 
-    def __show_formatted__(self, format_string):
+    def __show_formatted__(self, format_string) -> str:
         """
         Run git show with --no-notes --no-patch and specified format string
         """
@@ -35,7 +44,7 @@ class GitCommit:
         )
 
     @property
-    def properties(self):
+    def properties(self) -> List[str]:
         """
         Return all available properties
         """
@@ -51,111 +60,111 @@ class GitCommit:
         return props
 
     @property
-    def commit_hash(self):
+    def commit_hash(self) -> str:
         """
         Return git commit hash
         """
         return self.__show_formatted__('%H')[0]
 
     @property
-    def tree_hash(self):
+    def tree_hash(self) -> str:
         """
         Return git commit hash
         """
         return self.__show_formatted__('%T')[0]
 
     @property
-    def author_email(self):
+    def author_email(self) -> str:
         """
         Return git commit author email
         """
         return self.__show_formatted__('%ae')[0]
 
     @property
-    def author_name(self):
+    def author_name(self) -> str:
         """
         Return git commit author name
         """
         return self.__show_formatted__('%an')[0]
 
     @property
-    def author_timestamp(self):
+    def author_timestamp(self) -> int:
         """
         Return git commit author timestamp
         """
         return int(self.__show_formatted__('%at')[0])
 
     @property
-    def author_date(self):
+    def author_date(self) -> datetime:
         """
         Return git commit author timestamp as datetime in UTC
         """
         return datetime.fromtimestamp(self.author_timestamp).astimezone(UTC_TIMEZONE)
 
     @property
-    def commit_message(self):
+    def commit_message(self) -> str:
         """
         Return git commit message as list of lines
         """
         return self.__show_formatted__('%s')
 
     @property
-    def commit_timestamp(self):
+    def commit_timestamp(self) -> int:
         """
         Return commit timestamp
         """
         return int(self.__show_formatted__('%ct')[0])
 
     @property
-    def commit_date(self):
+    def commit_date(self) -> datetime:
         """
         Return commit timestamp as datetime in UTC
         """
         return datetime.fromtimestamp(self.commit_timestamp).astimezone(UTC_TIMEZONE)
 
     @property
-    def ref_names(self):
+    def ref_names(self) -> List[str]:
         """
         Return commit ref names
         """
         return self.__show_formatted__('%D')[0].split(', ')
 
     @property
-    def signing_key(self):
+    def signing_key(self) -> str:
         """
         Return signing key for GPG signed commit
         """
         return self.__show_formatted__('%GK')[0]
 
     @property
-    def signing_key_fingerprint(self):
+    def signing_key_fingerprint(self) -> str:
         """
         Return signing key fingerprint for GPG signed commit
         """
         return self.__show_formatted__('%GF')[0]
 
     @property
-    def signing_primary_key_fingerprint(self):
+    def signing_primary_key_fingerprint(self) -> str:
         """
         Return primary signing key fingerprint for GPG signed commit
         """
         return self.__show_formatted__('%GP')[0]
 
     @property
-    def signing_key_trust(self):
+    def signing_key_trust(self) -> str:
         """
         Return primary signing key fingerprint for GPG signed commit
         """
         return self.__show_formatted__('%GT')[0]
 
     @property
-    def signing_signer_name(self):
+    def signing_signer_name(self) -> str:
         """
         Return author name for GPG signed commit
         """
         return self.__show_formatted__('%GS')[0]
 
-    def get_change_set(self, revision=None):
+    def get_change_set(self, revision: str = None) -> 'GitChangeSet':
         """
         Show changed files between this against specified revision
 
@@ -165,7 +174,7 @@ class GitCommit:
             revision = f'{self.revision}~1'
         return self.repository.get_change_set(self.revision, revision)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """
         Return all properties as dictionary
 
@@ -176,7 +185,7 @@ class GitCommit:
             items[prop] = getattr(self, prop)
         return items
 
-    def to_json(self, indent=2):
+    def to_json(self, indent: int = DEFAULT_JSON_INDENT) -> str:
         """
         Return git commit details rendered as JSON
         """

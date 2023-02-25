@@ -1,4 +1,6 @@
-
+"""
+Configuration file for sphinx documentation renderer
+"""
 from sys_toolkit.configuration.base import ConfigurationSection
 
 DEFAULT_SPHINX_AUTODOC_PATH = 'docs/code'

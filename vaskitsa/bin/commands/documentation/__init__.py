@@ -1,7 +1,6 @@
 """
-CLI subcommands for python-autodoc-generator
+CLI subcommand 'vaskitsa documentation'
 """
-
 from cli_toolkit.command import Command
 
 from .generate import Generate

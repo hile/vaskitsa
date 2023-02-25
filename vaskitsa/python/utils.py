@@ -1,16 +1,19 @@
 """
 Utilities for vaskitsa
 """
-
 import keyword
 import os
 
 from pathlib import Path
+from typing import List, Optional, Union, TYPE_CHECKING
 
 import inflection
 
+if TYPE_CHECKING:
+    from .package import Package
 
-def is_python_module_directory(directory):
+
+def is_python_module_directory(directory: Union[str, Path]) -> bool:
     """
     Checks if directory is python module directory
     """
@@ -29,18 +32,18 @@ def is_python_module_directory(directory):
     return False
 
 
-def detect_package_module_name(repository):
+def detect_package_module_name(package: 'Package') -> str:
     """
     Set main module name using specified value or if not specified, deduce from
     repository folder name
     """
-    module_name = inflection.underscore(repository.name)
+    module_name = inflection.underscore(package.name)
     if '-' in module_name:
         module_name = module_name.replace('-', '_')
     return module_name
 
 
-def detect_python_package_path(directory=None):
+def detect_python_package_path(directory: Optional[Union[str, Path]] = None) -> Optional[Path]:
     """
     Directory package root from python code directory
     """
@@ -63,7 +66,10 @@ def detect_python_package_path(directory=None):
     return None
 
 
-def validate_module_name(value, convert_lowercase=False, allow_keywords=False):
+def validate_module_name(
+        value: str,
+        convert_lowercase: bool = False,
+        allow_keywords: bool = False) -> str:
     """
     Validate a string to be used as python package or module name
     """
@@ -86,7 +92,10 @@ def validate_module_name(value, convert_lowercase=False, allow_keywords=False):
     return value
 
 
-def get_module_path_components(value, convert_lowercase=False, allow_keywords=False):
+def get_module_path_components(
+        value: str,
+        convert_lowercase: bool = False,
+        allow_keywords: bool = False) -> List[str]:
     """
     Validate and return module path components
 

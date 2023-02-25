@@ -1,20 +1,31 @@
-
+"""
+Python module setup configuration and test environment
+"""
 from collections.abc import ItemsView, KeysView
+from pathlib import Path
+from typing import Any, List, TYPE_CHECKING
+
 from configparser import ConfigParser
 
 from ..exceptions import PythonSetupError
+
+if TYPE_CHECKING:
+    from .package import Package
 
 
 class TestEnvironment:
     """
     Setup settings for testenv
     """
-    def __init__(self, package, settings):
+    package: 'Package'
+    settings: dict
+
+    def __init__(self, package: 'Package', settings: dict) -> None:
         self.package = package
         self.settings = settings
 
     @staticmethod
-    def __parse_line_list__(value):
+    def __parse_line_list__(value: str) -> List[str]:
         """
         Parse a field value with multiple lines of text
         """
@@ -27,14 +38,14 @@ class TestEnvironment:
         return []
 
     @property
-    def commands(self):
+    def commands(self) -> List[str]:
         """
         Parse test environment 'commands' list
         """
         return self.__parse_line_list__(self.settings.get('commands', None))
 
     @property
-    def deps(self):
+    def deps(self) -> List[str]:
         """
         Parser test environment 'deps' list
         """
@@ -45,7 +56,10 @@ class SetupConfig(ConfigParser):
     """
     Parser for setup.cfg file in python package
     """
-    def __init__(self, package):
+    package: 'Package'
+    path: Path
+
+    def __init__(self, package: 'Package'):
         super().__init__()
         self.package = package
         self.path = self.package.joinpath('setup.cfg')
@@ -53,7 +67,7 @@ class SetupConfig(ConfigParser):
             if not self.read(self.path):
                 raise PythonSetupError(f'Error loading {self.path}')
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> Any:
         """
         Override __getitem__ to not return DEFAULT
         """
@@ -62,7 +76,7 @@ class SetupConfig(ConfigParser):
         return super().__getitem__(item)
 
     @property
-    def testenv(self):
+    def testenv(self) -> TestEnvironment:
         """
         Return testenv settings parsed with TestEnvironment class
         """
@@ -70,14 +84,14 @@ class SetupConfig(ConfigParser):
             raise PythonSetupError(f'testenv not configured in {self.path}')
         return TestEnvironment(self.package, self['testenv'])
 
-    def keys(self):
+    def keys(self) -> KeysView:
         """
         Return configuration without DEFAULT
         """
         return KeysView(key for key in super().keys() if key != 'DEFAULT')
 
     # pylint: disable=redefined-builtin
-    def items(self, section=None, raw=False, vars=None):
+    def items(self, section: str = None, raw: bool = False, vars: List[str] = None) -> ItemsView:
         """
         Return configuration without DEFAULT
         """

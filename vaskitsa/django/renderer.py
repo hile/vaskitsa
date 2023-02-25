@@ -1,10 +1,10 @@
 """
 Django project and app template renderer from .j2 jinja files
 """
-
 import shutil
 
 from pathlib import Path
+from typing import List
 
 from vaskitsa.tree import Tree
 
@@ -21,14 +21,14 @@ class DjangoPackageRenderer(Tree):
     __path_replacements__ = []
 
     @property
-    def template_tree(self):
+    def template_tree(self) -> Tree:
         """
         Return __template_root_path__ as Tree object
         """
         return Tree(self.__template_root_path__)
 
     @property
-    def paths(self):
+    def paths(self) -> List[Path]:
         """
         Return pairs ofp origin and target paths
         """
@@ -39,7 +39,7 @@ class DjangoPackageRenderer(Tree):
             paths.append((item, target_path))
         return paths
 
-    def apply_path_patterns(self, path):
+    def apply_path_patterns(self, path: Path) -> Path:
         """
         Apply path patterns to relative path
         """
@@ -55,7 +55,7 @@ class DjangoPackageRenderer(Tree):
             parts.append(str(part))
         return Path(*parts)
 
-    def deploy_file(self, source_path, target_path, overwrite=False):
+    def deploy_file(self, source_path: Path, target_path: Path, overwrite: bool = False) -> None:
         """
         Deploy file to target package
 
@@ -69,7 +69,7 @@ class DjangoPackageRenderer(Tree):
             print(f'copy file {target_path}')
             shutil.copyfile(source_path, target_path)
 
-    def render_template(self, source_path, target_path, overwrite=False):
+    def render_template(self, source_path: Path, target_path: Path, overwrite: bool = False) -> True:
         """
         Render specified template file to target path
         """
@@ -77,7 +77,7 @@ class DjangoPackageRenderer(Tree):
             return
         FileTemplate(self, source_path).render(target_path)
 
-    def get_template_vars(self, **kwargs):
+    def get_template_vars(self, **kwargs) -> dict:
         """
         Get template variables
         """
@@ -88,7 +88,7 @@ class DjangoPackageRenderer(Tree):
         return template_vars
 
     # pylint: disable=arguments-differ,arguments-renamed
-    def create(self, overwrite=False):
+    def create(self, overwrite: bool = False) -> None:
         """
         Create app directory structure from filenames in template
         """

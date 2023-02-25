@@ -1,6 +1,8 @@
 """
 Utility classes for git configuration
 """
+from pathlib import Path
+from typing import Any, List, Optional, Tuple, Union
 
 from ..exceptions import GitError
 from .utils import run_git_command
@@ -26,7 +28,16 @@ class GitConfigSetting:
     """
     Setting in git configuration
     """
-    def __init__(self, config, scope, key, value):
+    config: 'GitRepositoryConfig'
+    scope: str
+    key: str
+    value: str
+
+    def __init__(self,
+                 config: 'GitRepositoryConfig',
+                 scope: str,
+                 key: str,
+                 value: str) -> None:
         """
         Git configuration settings with scope
         """
@@ -35,7 +46,7 @@ class GitConfigSetting:
         self.key = key
         self.value = value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.value
 
 
@@ -43,16 +54,23 @@ class GitConfigSection:
     """
     Git configuration section
     """
-    def __init__(self, config, parent, name):
+    config: 'GitRepositoryConfig'
+    parent: 'GitConfigSection'
+    name: str
+
+    def __init__(self,
+                 config: 'GitRepositoryConfig',
+                 parent: 'GitConfigSection',
+                 name: str) -> None:
         self.__config__ = config
         self.__parent__ = parent
         self.__name__ = name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '.'.join(self.__section_path__)
 
     @property
-    def __section_path__(self):
+    def __section_path__(self) -> List[str]:
         """
         Path to this section from root
         """
@@ -64,7 +82,7 @@ class GitConfigSection:
             section = section.__parent__
         return list(reversed(parts))
 
-    def __get_or_create_section__(self, path):
+    def __get_or_create_section__(self, path: List[str]) -> 'GitConfigSection':
         """
         Get or create configuration section by path
         """
@@ -84,7 +102,7 @@ class GitConfigSection:
             return section.__get_or_create_section__(path[1:])
         return section
 
-    def set(self, attr, value):
+    def set(self, attr: str, value: Any) -> None:
         """
         Set value to configuration section
         """
@@ -95,15 +113,21 @@ class GitIncludePattern:
     """
     Include path configuration
     """
-    def __init__(self, condition, pattern=None):
+    condition: str
+    pattern: Optional[str]
+    paths = List[str]
+
+    def __init__(self,
+                 condition: str,
+                 pattern: Optional[str] = None) -> None:
         self.condition = condition
         self.pattern = pattern
         self.paths = []
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'{self.condition} {self.pattern}'
 
-    def set(self, attr, value):
+    def set(self, attr: str, value: str) -> None:
         """
         Set git include pattern path
         """
@@ -117,14 +141,17 @@ class GitIncludeCondition:
     """
     Git includeIf condition
     """
-    def __init__(self, condition):
+    __condition__: str
+    patterns: List[GitIncludePattern]
+
+    def __init__(self, condition: str) -> None:
         self.__condition__ = condition
         self.patterns = []
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__condition__
 
-    def add_pattern(self, pattern):
+    def add_pattern(self, pattern: str) -> GitIncludePattern:
         """
         Add pattern to condition, returns created GitIncludePattern
         """
@@ -137,13 +164,19 @@ class GitIncludeConfig(GitConfigSection):
     """
     Git configuration section for include and includeif settings
     """
+    config: 'GitRepositoryConfig'
+    parent: 'GitConfigSection'
+    name: str
 
-    def __init__(self, config, parent, name):
+    def __init__(self,
+                 config: 'GitRepositoryConfig',
+                 parent: 'GitConfigSection',
+                 name: str) -> None:
         super().__init__(config, parent, name)
         self.paths = []
 
     @staticmethod
-    def __parse_include__(path):
+    def __parse_include__(path: str) -> Tuple[str, str]:
         """
         Parse include or includeif attribute
         """
@@ -157,9 +190,9 @@ class GitIncludeConfig(GitConfigSection):
                 raise GitError(f'Unsupported includeIf config: {path}') from error
         raise GitError(f'Error parsing include {path}')
 
-    def __get_or_create_section__(self, path):
+    def __get_or_create_section__(self, path: str) -> GitIncludePattern:
         """
-        Get or create incclude path configuration
+        Get or create include path configuration pattern
         """
         condition, pattern = self.__parse_include__(path[0])
         if getattr(self, condition, None) is None:
@@ -167,7 +200,7 @@ class GitIncludeConfig(GitConfigSection):
         condition_config = getattr(self, condition)
         return condition_config.add_pattern(pattern)
 
-    def set(self, attr, value):
+    def set(self, attr: str, value: Any) -> None:
         """
         Set GitIncludeConfig section setting
         """
@@ -181,11 +214,11 @@ class GitConfig(GitConfigSection):
     """
     Git configuration handler base class
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(config=self, parent=None, name='')
 
     @staticmethod
-    def run_git_command(*args, **kwargs):
+    def run_git_command(*args, **kwargs) -> List[str]:
         """
         Run 'git config' command with arguments
         """
@@ -194,13 +227,13 @@ class GitConfig(GitConfigSection):
             args = ['config'] + args
         return run_git_command(*args, cwd=kwargs.get('cwd', None))
 
-    def __load_config__(self):
+    def __load_config__(self) -> List[str]:
         """
         Load configuration
         """
         return self.run_git_command('--show-scope', '--list')
 
-    def load(self):
+    def load(self) -> None:
         """
         Load git configuration
         """
@@ -218,18 +251,20 @@ class GitRepositoryConfig(GitConfig):
     """
     Git configuration for a git repository
     """
-    def __init__(self, repository_path):
-        super().__init__()
-        self.repository_path = repository_path
+    repository_path = Path
 
-    def __repr__(self):
+    def __init__(self, repository_path: Union[str, Path]) -> None:
+        super().__init__()
+        self.repository_path = Path(repository_path).expanduser()
+
+    def __repr__(self) -> str:
         return f'{self.repository_path} config'
 
-    def __load_config__(self):
+    def __load_config__(self) -> List[str]:
         """
         Load configuration
         """
         return self.run_git_command(
             '--show-scope', '--list',
-            cwd=self.repository_path
+            cwd=str(self.repository_path)
         )

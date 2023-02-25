@@ -1,9 +1,9 @@
 """
 Parsing of python package version from various places
 """
+from typing import Optional, TYPE_CHECKING
 
 from packaging.version import Version, InvalidVersion
-
 from pathlib_tree.tree import FilesystemError
 
 import toml
@@ -11,13 +11,19 @@ import toml
 from .constants import DUMMY_VERSION, PYPROJECT_TOML_FILE, RE_VERSION_LINE, VersionTypes
 from .utils import validate_module_name
 
+if TYPE_CHECKING:
+    from .package import Package
+
 
 class PythonPackageVersion(Version):
     """
     Class to handle package version parsing and updating
     """
+    package: 'Package'
+    main_module_name: str
+    version_type: str
 
-    def __init__(self, package, main_module_name=None):
+    def __init__(self, package: 'Package', main_module_name: Optional[str] = None) -> None:
         self.package = package
         if main_module_name is None:
             main_module_name = validate_module_name(package.name.replace('-', '_'))
@@ -25,7 +31,7 @@ class PythonPackageVersion(Version):
         self.version_type = None
         super().__init__(self.__load__())
 
-    def __get_peotry_tool_section__(self):
+    def __get_peotry_tool_section__(self) -> dict:
         """
         Get poetry setting section from pyproject.toml file
 
@@ -37,7 +43,7 @@ class PythonPackageVersion(Version):
         with path.open('r', encoding='utf-8') as filedescriptor:
             return toml.loads(filedescriptor.read()).get('tool', {}).get('poetry', {})
 
-    def __load_poetry_version__(self):
+    def __load_poetry_version__(self) -> Optional[str]:
         """
         Load poetry version from pyproject.toml file
         """
@@ -49,7 +55,7 @@ class PythonPackageVersion(Version):
                 return value
         return None
 
-    def __load_module_version__(self):
+    def __load_module_version__(self) -> Optional[str]:
         """
         Read version string from pyproject.toml file or __init__.py variable __version__
         """
@@ -63,7 +69,7 @@ class PythonPackageVersion(Version):
                         return match.groupdict()['version']
         return None
 
-    def __load__(self):
+    def __load__(self) -> str:
         """
         Load version string from known sources
         """
@@ -77,7 +83,7 @@ class PythonPackageVersion(Version):
                 return version
         return DUMMY_VERSION
 
-    def update_module_version(self, version):
+    def update_module_version(self, version: str) -> None:
         """
         Update new version to the version __init__.py __version__ field
         """

@@ -1,10 +1,10 @@
 """
 Run git command
 """
-
 import os
 
 from pathlib import Path
+from typing import List, Optional
 
 from sys_toolkit.exceptions import CommandError
 from sys_toolkit.subprocess import run_command_lineoutput
@@ -12,7 +12,7 @@ from sys_toolkit.subprocess import run_command_lineoutput
 from ..exceptions import GitError
 
 
-def detect_git_repository_path(directory=None):
+def detect_git_repository_path(directory: Optional[str] = None) -> Optional[Path]:
     """
     Detect git repository path by .git directory
     """
@@ -29,7 +29,7 @@ def detect_git_repository_path(directory=None):
     return None
 
 
-def run_git_command(*args, **kwargs):
+def run_git_command(*args, **kwargs) -> List[str]:
     """
     Run a git command with specified arguments, returning stdout
 

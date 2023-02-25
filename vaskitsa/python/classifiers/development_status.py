@@ -1,6 +1,7 @@
 """
 Classifier group for Development Status
 """
+from typing import List
 
 from .base import TroveClassifier, TroveClassifierGroup
 
@@ -10,10 +11,13 @@ class DevelopmentStatus(TroveClassifier):
     """
     Development status value
     """
-    def __init__(self, parent, path):
+    index: int
+    label: str
+
+    def __init__(self, parent: TroveClassifierGroup, path: List[str]) -> None:
         super().__init__(parent, path)
-        self.index, self.label = self.name.split(' - ')
-        self.index = int(self.index)
+        index, self.label = self.name.split(' - ')
+        self.index = int(index)
 
 
 class DevelopmentStatusGroup(TroveClassifierGroup):
@@ -22,7 +26,7 @@ class DevelopmentStatusGroup(TroveClassifierGroup):
     """
     __classifier_loader_class__ = DevelopmentStatus
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """
         Return development status strings as dict
         """

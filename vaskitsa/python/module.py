@@ -3,10 +3,10 @@ Base class for python module document generator
 
 A module is part of a package and contains python files
 """
-
 import os
 
 from pathlib import Path
+from typing import List, Optional, Union, TYPE_CHECKING
 
 from pathlib_tree.exceptions import FilesystemError
 from pathlib_tree.tree import Tree
@@ -14,29 +14,46 @@ from pathlib_tree.tree import Tree
 from .constants import MODULE_DEFAULT_GROUP
 from .file import PythonFile
 
+if TYPE_CHECKING:
+    from .package import Package
+
 
 class PythonModule(Tree):
     """
     Documentation generator for module in a package
     """
+    path: Path
+    package: Optional['Package']
+    group: Optional[str]
+    files: List[PythonFile]
+
     python_file_class = PythonFile
 
     def __repr__(self):
         return str(self.relative_directory)
 
     # pylint: disable=redefined-builtin
-    def __init__(self, path, package=None, group=None, create_missing=False,
-                 sorted=True, mode=None, excluded=None):
+    def __init__(self,
+                 path: Path,
+                 package: Optional['Package'] = None,
+                 group: Optional[str] = None,
+                 create_missing: bool = False,
+                 sorted: bool = True,
+                 mode: str = None,
+                 excluded: List[str] = None):
         super().__init__(path, create_missing=False, sorted=sorted, mode=mode, excluded=excluded)
         self.package = package
         self.group = group
         if not self.is_dir() and create_missing:
             self.mkdir(parents=True)
-        self.files = []
-        self.load_files()
+        self.files = self.load_files()
 
     @classmethod
-    def create_module(cls, path, package=None, group=MODULE_DEFAULT_GROUP):
+    def create_module(
+            cls,
+            path: Union[str, Path],
+            package: Optional['Package'] = None,
+            group: str = MODULE_DEFAULT_GROUP) -> 'PythonModule':
         """
         Create module to package
 
@@ -61,7 +78,7 @@ class PythonModule(Tree):
         return module
 
     @property
-    def parent(self):
+    def parent(self) -> Optional[Union['Package', 'PythonModule']]:
         """
         Return module parent as Module
         """
@@ -74,7 +91,7 @@ class PythonModule(Tree):
         return self.package
 
     @property
-    def index(self):
+    def index(self) -> Optional[PythonFile]:
         """
         Return package index file __init__.py
         """
@@ -84,7 +101,7 @@ class PythonModule(Tree):
         return None
 
     @property
-    def relative_directory(self):
+    def relative_directory(self) -> Optional[Path]:
         """
         Return relative parent directory to package root
         """
@@ -93,7 +110,7 @@ class PythonModule(Tree):
         return None
 
     @property
-    def import_path(self):
+    def import_path(self) -> Optional[str]:
         """
         Return file import path
         """
@@ -102,7 +119,7 @@ class PythonModule(Tree):
             return str(path).replace(os.sep, '.')
         return None
 
-    def debug(self, *args):
+    def debug(self, *args) -> None:
         """
         Pass debug message to parent
         """
@@ -110,7 +127,7 @@ class PythonModule(Tree):
             return self.package.debug(*args)
         raise FilesystemError('Module not linked to a package')
 
-    def error(self, *args):
+    def error(self, *args) -> None:
         """
         Pass error message to parent
         """
@@ -118,7 +135,7 @@ class PythonModule(Tree):
             return self.package.error(*args)
         raise FilesystemError('Module not linked to a package')
 
-    def message(self, *args):
+    def message(self, *args) -> None:
         """
         Pass messages to parent
         """
@@ -126,7 +143,7 @@ class PythonModule(Tree):
             return self.package.message(*args)
         raise FilesystemError('Module not linked to a package')
 
-    def load_files(self):
+    def load_files(self) -> List[PythonFile]:
         """
         Load python files in module
         """
@@ -134,9 +151,9 @@ class PythonModule(Tree):
         for child in self:
             if child.parent == self and child.suffix == '.py' and child.is_file():
                 files.append(self.python_file_class(child, module=self))
-        self.files = files
+        return files
 
-    def create_file(self, name):
+    def create_file(self, name: str) -> PythonFile:
         """
         Create python file to module
         """

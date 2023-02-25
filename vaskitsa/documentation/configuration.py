@@ -1,4 +1,6 @@
-
+"""
+Vaskista code documentation generator configuration
+"""
 from sys_toolkit.configuration.base import ConfigurationSection
 
 DEFAULT_DOCUMENTS_PATH = 'docs'

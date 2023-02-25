@@ -1,5 +1,8 @@
-
+"""
+File in python documentation tree sphinx documentation
+"""
 from pathlib import Path
+from typing import List, Union
 
 from ..file import FileDocumentGenerator
 
@@ -10,7 +13,7 @@ class AutoModuleFileGenerator(FileDocumentGenerator):
     """
 
     @property
-    def template_directory(self):
+    def template_directory(self) -> Path:
         """
         Return directory for templates from configuration
 
@@ -19,14 +22,14 @@ class AutoModuleFileGenerator(FileDocumentGenerator):
         return self.module.package.template_directory
 
     @property
-    def template_name(self):
+    def template_name(self) -> str:
         """
         Return template name for module documentation
         """
         return self.module.package.template_configuration.templates.file
 
     @property
-    def automodule_flags(self):
+    def automodule_flags(self) -> List[str]:
         """
         Generate list of automodule flags, indented with 4 spaces
         """
@@ -34,7 +37,7 @@ class AutoModuleFileGenerator(FileDocumentGenerator):
         return [f':{flag}:' for flag in flags]
 
     @property
-    def file_import_paths(self):
+    def file_import_paths(self) -> List[Path]:
         """
         Return module file import paths excluding this file
         """
@@ -44,7 +47,7 @@ class AutoModuleFileGenerator(FileDocumentGenerator):
             if item != self
         ]
 
-    def get_output_filename(self, directory):
+    def get_output_filename(self, directory: Union[str, Path]) -> Path:
         """
         Return output filename for generated file
 

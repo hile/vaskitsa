@@ -1,13 +1,14 @@
 """
 Python code package with modules
 """
-
 import os
 import re
 
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
+
 from ..git.repository import GitRepository
 from ..tree import RepositoryTree
-
 from .constants import (
     MODULE_DEFAULT_GROUP,
     REPOSITORY_ROOT_IGNORED_FILES,
@@ -19,6 +20,9 @@ from .version import PythonPackageVersion
 from .setup import SetupConfig
 from .utils import detect_package_module_name, get_module_path_components
 
+if TYPE_CHECKING:
+    from ..configuration import Configuration
+
 RE_VERSION = re.compile("""^__version__ = '(?P<version>.*)'$""")
 
 
@@ -26,13 +30,27 @@ class Package(RepositoryTree):
     """
      of python code
     """
+    module_name: str
     python_module_class = PythonModule
+    configuration: Optional['Configuration']
+
+    __module_index__: Dict
+    __python_modules__: Optional[List[PythonModule]]
+    __python_test_modules__: Optional[List[PythonModule]]
+    __setup__: Optional[SetupConfig]
+
     __git_revision_characters__ = 8
     """Number of characters in short git revision from git_short_revision propery"""
 
     # pylint: disable=redefined-builtin
-    def __init__(self, path, name=None, create_missing=False, sorted=True, mode=None,
-                 excluded=list, configuration=None):
+    def __init__(self,
+                 path: Path,
+                 name: Optional[str] = None,
+                 create_missing: bool = False,
+                 sorted: bool = True,
+                 mode: str = None,
+                 excluded: List[str] = list,
+                 configuration: Optional['Configuration'] = None):
         super().__init__(path, create_missing, sorted, mode, excluded)
         self.__module_index__ = {}
         self.__python_modules__ = None
@@ -40,7 +58,7 @@ class Package(RepositoryTree):
         self.__setup__ = None
         self.module_name = detect_package_module_name(self)
 
-    def __load_modules__(self):
+    def __load_modules__(self) -> None:
         """
         Load python modules in the package and cache results to attributes
         __python_modules__ and __python_test_modules__
@@ -48,7 +66,7 @@ class Package(RepositoryTree):
         self.__python_modules__, self.__python_test_modules__ = self.detect_python_modules()
 
     @property
-    def setup(self):
+    def setup(self) -> SetupConfig:
         """
         Lazy loading of setup.cfg parser
         """
@@ -57,21 +75,21 @@ class Package(RepositoryTree):
         return self.__setup__
 
     @property
-    def git_repository(self):
+    def git_repository(self) -> GitRepository:
         """
         Return git repository object for python package source code tree
         """
         return GitRepository(self)
 
     @property
-    def git_short_revision(self):
+    def git_short_revision(self) -> str:
         """
         Return git repository short hash with self.__git_revision_characters__ letters
         """
         return self.git_repository.get_revision(self.__git_revision_characters__)
 
     @property
-    def python_package_version(self):
+    def python_package_version(self) -> PythonPackageVersion:
         """
         Try to read version from main module index file
         """
@@ -80,7 +98,7 @@ class Package(RepositoryTree):
         return PythonPackageVersion(self)
 
     @property
-    def python_module_paths(self):
+    def python_module_paths(self) -> List[Path]:
         """
         Find valid module paths in directory
         """
@@ -94,7 +112,7 @@ class Package(RepositoryTree):
         return modules
 
     @property
-    def python_modules(self):
+    def python_modules(self) -> List[PythonModule]:
         """
         Get python modules
         """
@@ -103,7 +121,7 @@ class Package(RepositoryTree):
         return self.__python_modules__
 
     @property
-    def python_test_modules(self):
+    def python_test_modules(self) -> List[PythonModule]:
         """
         Get python test modules
         """
@@ -112,7 +130,7 @@ class Package(RepositoryTree):
         return self.__python_test_modules__
 
     @property
-    def python_files(self):
+    def python_files(self) -> List[PythonFile]:
         """
         Return files in all python packages
         """
@@ -121,7 +139,7 @@ class Package(RepositoryTree):
             files.extend(module.files)
         return files
 
-    def detect_python_modules(self):
+    def detect_python_modules(self) -> Tuple[List[PythonModule], List[PythonModule]]:
         """
         Detect python modules in package
         """
@@ -157,7 +175,7 @@ class Package(RepositoryTree):
 
         return modules, test_modules
 
-    def get_python_module(self, name):
+    def get_python_module(self, name: str) -> Optional[PythonModule]:
         """
         Get python module by relative path with root module name
         """
@@ -170,7 +188,11 @@ class Package(RepositoryTree):
         except KeyError:
             return None
 
-    def create_python_module(self, name, test_module=False, group=MODULE_DEFAULT_GROUP):
+    def create_python_module(
+            self,
+            name: str,
+            test_module: bool = False,
+            group: str = MODULE_DEFAULT_GROUP) -> PythonModule:
         """
         Create a new python module to package
         """
@@ -187,9 +209,13 @@ class Package(RepositoryTree):
                 )
         return module
 
-    def create_python_file(self, path, test_module=False, group=MODULE_DEFAULT_GROUP):
+    def create_python_file(
+            self,
+            path: Path,
+            test_module: bool = False,
+            group: str = MODULE_DEFAULT_GROUP) -> PythonFile:
         """
-        Create new python file to specified path ini package
+        Create new python file to specified path in a package
 
         As a side effect creates module path as required
         """

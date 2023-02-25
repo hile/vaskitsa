@@ -1,4 +1,7 @@
-
+"""
+Hook to run pylint
+"""
+from cli_toolkit.base import Base
 from ..hook import CLIHook
 
 COMMAND = (
@@ -11,5 +14,5 @@ class Pylint(CLIHook):
     """
     Run pylint
     """
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent: Base, **kwargs):
         super().__init__(parent, COMMAND, **kwargs)

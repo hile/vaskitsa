@@ -1,6 +1,8 @@
 """
 Git repository as python class
 """
+from pathlib import Path
+from typing import List,  Optional
 
 from ..exceptions import GitError
 from ..tree import RepositoryTree
@@ -15,10 +17,20 @@ class GitRepository(RepositoryTree):
     """
     Abstraction of git repository checkout details for specified path
     """
+    is_git_directory: bool
+    config: GitRepositoryConfig
+    __commits_detected__: bool
 
     # pylint: disable=redefined-builtin
-    def __new__(cls, path, name=None, create_missing=False, sorted=True, mode=None,
-                excluded=list, configuration=None):
+    def __new__(cls,
+                path: Path,
+                name: Optional[str] = None,
+                create_missing: bool = False,
+                sorted: bool = True,
+                mode: Optional[str] = None,
+                excluded: List[str] = list,
+                configuration: Optional[GitRepositoryConfig] = None):
+
         git_repository_path = detect_git_repository_path(path)
         if git_repository_path is not None:
             path = git_repository_path
@@ -34,7 +46,7 @@ class GitRepository(RepositoryTree):
         return super().__new__(cls, path, name, create_missing, sorted, mode, excluded, configuration)
 
     @property
-    def has_commits(self):
+    def has_commits(self) -> bool:
         """
         Check for git repository with no commits
 
@@ -52,7 +64,7 @@ class GitRepository(RepositoryTree):
         return False
 
     @property
-    def head(self):
+    def head(self) -> GitCommit:
         """
         Return git commit HEAD
         """
@@ -62,7 +74,7 @@ class GitRepository(RepositoryTree):
         return GitCommit(self)
 
     @property
-    def reflog(self):
+    def reflog(self) -> List[GitCommit]:
         """
         Return git reflog items as GitCommit objects
         """
@@ -70,7 +82,7 @@ class GitRepository(RepositoryTree):
         lines = run_git_command(*['reflog', 'show', '--format=%H'], cwd=self)
         return [GitCommit(self, ref) for ref in lines]
 
-    def validate(self):
+    def validate(self) -> None:
         """
         Ensure directory exists and is a valid git repository
         """
@@ -79,7 +91,7 @@ class GitRepository(RepositoryTree):
         if not self.is_git_directory:
             raise GitError(f'Directory is not git repository: {self}')
 
-    def run_git_command(self, *args):
+    def run_git_command(self, *args) -> List[str]:
         """
         Run a git command with specified arguments, returning stdout
 
@@ -90,7 +102,7 @@ class GitRepository(RepositoryTree):
             raise GitError(f'Repository has no commits: {self}')
         return run_git_command(*args, cwd=self)
 
-    def get_revision(self, characters=None):
+    def get_revision(self, characters: Optional[str] = None) -> str:
         """
         Get git revision for current branch HEAD
 
@@ -101,7 +113,7 @@ class GitRepository(RepositoryTree):
             return value[:characters]
         return value
 
-    def get_commit(self, reference):
+    def get_commit(self, reference: str) -> str:
         """
         Get GitCommit object for specified git reference
 
@@ -112,7 +124,7 @@ class GitRepository(RepositoryTree):
             raise GitError(f'Repository has no commits: {self}')
         return GitCommit(self, reference)
 
-    def get_change_set(self, start_revision, end_revision):
+    def get_change_set(self, start_revision: str, end_revision: str) -> GitChangeSet:
         """
         Show changed files between two change
 

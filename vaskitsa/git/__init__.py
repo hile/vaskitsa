@@ -1,3 +1,3 @@
 """
-Utilities for git repositories
+Utilities for git repositories from filesystem directories
 """

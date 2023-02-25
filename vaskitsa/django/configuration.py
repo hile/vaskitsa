@@ -3,6 +3,7 @@ Django project template configuration
 """
 
 from pathlib import Path
+from typing import Optional, Union
 
 import yaml
 
@@ -14,12 +15,18 @@ class ProjectConfiguration:
     """
     Loader for django project template configuration yaml files
     """
-    def __init__(self, directory, configuration_template):
+    directory: Path
+    path: Path
+    project: Optional[str] = None
+
+    def __init__(self,
+                 directory: Union[str, Path],
+                 configuration_template: Union[str, Path]) -> None:
         self.directory = Path(directory)
         self.path = Path(configuration_template)
         self.project = None
 
-    def load(self):
+    def load(self) -> None:
         """
         Load project configuration
         """
