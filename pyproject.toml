@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vaskitsa"
-version = "2.2.2"
+version = "2.2.3"
 description = "Source code management and documentation maintenance tools"
 authors = ["Ilkka Tuohela <hile@iki.fi>"]
 readme = "README.md"
